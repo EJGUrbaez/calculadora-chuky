@@ -26,26 +26,11 @@
       box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
 
-    h1 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1a1a1a;
-      margin-bottom: 1.5rem;
-    }
+    h1 { font-size: 18px; font-weight: 600; color: #1a1a1a; margin-bottom: 1.5rem; }
 
-    label {
-      font-size: 13px;
-      color: #666;
-      display: block;
-      margin-bottom: 6px;
-    }
+    label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
 
-    .input-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
+    .input-row { display: flex; gap: 8px; align-items: center; margin-bottom: 1.5rem; }
 
     input[type="number"] {
       flex: 1;
@@ -62,19 +47,11 @@
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
-    input[type="number"]:focus {
-      border-color: #555;
-      background: #fff;
-    }
+    input[type="number"]:focus { border-color: #555; background: #fff; }
 
-    .unit {
-      font-size: 13px;
-      color: #888;
-    }
+    .unit { font-size: 13px; color: #888; }
 
-    .results {
-      display: none;
-    }
+    .results { display: none; }
 
     .result-block {
       background: #f8f8f8;
@@ -91,20 +68,10 @@
       border-bottom: 1px solid #ebebeb;
     }
 
-    .step-row:last-child {
-      border-bottom: none;
-    }
+    .step-row:last-child { border-bottom: none; }
 
-    .step-label {
-      font-size: 13px;
-      color: #666;
-    }
-
-    .step-value {
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a1a1a;
-    }
+    .step-label { font-size: 13px; color: #666; }
+    .step-value { font-size: 15px; font-weight: 600; color: #1a1a1a; }
 
     .badge {
       display: inline-block;
@@ -117,47 +84,53 @@
       vertical-align: middle;
     }
 
-    .inc {
-      color: #2a7a4f;
+    .inc { color: #2a7a4f; }
+
+    .flete-block {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 10px;
+      text-align: center;
     }
+
+    .flete-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #a0a8c0;
+      margin-bottom: 8px;
+    }
+
+    .flete-value { font-size: 36px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
+    .flete-sub { font-size: 12px; color: #6b7490; margin-top: 6px; }
 
     .final-block {
       background: #ffffff;
       border: 1.5px solid #e0e0e0;
       border-radius: 12px;
       padding: 1rem 1.25rem;
+      margin-bottom: 10px;
     }
 
-    .final-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+    .final-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .final-label { font-size: 14px; color: #666; }
+    .final-value { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+    .total-note { text-align: right; font-size: 12px; color: #999; margin-top: 4px; }
+
+    .nota-block {
+      background: #fffbea;
+      border: 1px solid #f0d060;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
     }
 
-    .final-label {
-      font-size: 14px;
-      color: #666;
-    }
+    .nota-block p { font-size: 12px; color: #7a6200; line-height: 1.5; }
+    .nota-block strong { font-weight: 600; }
 
-    .final-value {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1a1a1a;
-    }
-
-    .total-note {
-      text-align: right;
-      font-size: 12px;
-      color: #999;
-      margin-top: 4px;
-    }
-
-    .hint {
-      font-size: 13px;
-      color: #aaa;
-      text-align: center;
-      padding: 1.5rem 0;
-    }
+    .hint { font-size: 13px; color: #aaa; text-align: center; padding: 1.5rem 0; }
   </style>
 </head>
 <body>
@@ -171,6 +144,7 @@
     </div>
 
     <div class="results" id="results">
+
       <div class="result-block">
         <div class="step-row">
           <span class="step-label">Valor inicial</span>
@@ -181,15 +155,28 @@
           <span class="step-value" id="r1raw">—</span>
         </div>
         <div class="step-row">
-          <span class="step-label">Redondeado al siguiente múltiplo de 1000 <span class="badge">paso 1</span></span>
+          <span class="step-label">Redondeado al siguiente múltiplo de 1.000 <span class="badge">paso 1</span></span>
           <span class="step-value" id="r1">—</span>
         </div>
+      </div>
+
+      <div class="flete-block">
+        <div class="flete-title">Valor real del flete</div>
+        <div class="flete-value" id="rflete">—</div>
+        <div class="flete-sub">Redondeado al siguiente múltiplo de 1.000</div>
+      </div>
+
+      <div class="result-block">
         <div class="step-row">
           <span class="step-label">Incremento del + 1.4343%</span>
           <span class="step-value inc" id="r2inc">—</span>
         </div>
         <div class="step-row">
-          <span class="step-label">Resultado paso 2</span>
+          <span class="step-label">Resultado paso 2 (con decimales)</span>
+          <span class="step-value" id="r2raw">—</span>
+        </div>
+        <div class="step-row">
+          <span class="step-label">Resultado paso 2 (redondeado)</span>
           <span class="step-value" id="r2">—</span>
         </div>
       </div>
@@ -201,6 +188,11 @@
         </div>
         <p class="total-note" id="rtotal">—</p>
       </div>
+
+      <div class="nota-block">
+        <p><strong>Nota:</strong> El resultado final se redondea al entero siguiente solo si el primer decimal es 9. Ejemplo: 514.271,9 → 514.272</p>
+      </div>
+
     </div>
 
     <p class="hint" id="hint">Ingresa un valor para ver el desglose</p>
@@ -214,8 +206,24 @@
       }).format(n);
     }
 
+    function fmtEntero(n) {
+      return new Intl.NumberFormat('es-CO', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(n);
+    }
+
     function siguienteMultiplo1000(n) {
       return Math.ceil(n / 1000) * 1000;
+    }
+
+    // Redondea al entero siguiente solo si el primer decimal es 9
+    function redondearSi9(n) {
+      const primerDecimal = Math.floor((n * 10) % 10);
+      if (primerDecimal === 9) {
+        return Math.ceil(n);
+      }
+      return n;
     }
 
     function calcular() {
@@ -231,17 +239,22 @@
 
       const p1raw = raw * 1.014;
       const p1 = siguienteMultiplo1000(p1raw);
-      const p2 = p1 * 1.014343;
-      const inc2 = p2 - p1;
+      const p2raw = p1 * 1.014343;
+      const p2 = redondearSi9(p2raw);
+      const inc2 = p2raw - p1;
       const totalInc = p2 - raw;
       const totalPct = ((p2 / raw) - 1) * 100;
 
+      const estaRedondeado = Number.isInteger(p2);
+
       document.getElementById('r0').textContent = '$ ' + fmt(raw);
       document.getElementById('r1raw').textContent = '$ ' + fmt(p1raw);
-      document.getElementById('r1').textContent = '$ ' + fmt(p1);
+      document.getElementById('r1').textContent = '$ ' + fmtEntero(p1);
+      document.getElementById('rflete').textContent = '$ ' + fmtEntero(p1);
       document.getElementById('r2inc').textContent = '+ $ ' + fmt(inc2);
-      document.getElementById('r2').textContent = '$ ' + fmt(p2);
-      document.getElementById('rfinal').textContent = '$ ' + fmt(p2);
+      document.getElementById('r2raw').textContent = '$ ' + fmt(p2raw);
+      document.getElementById('r2').textContent = estaRedondeado ? '$ ' + fmtEntero(p2) + ' (redondeado)' : '$ ' + fmt(p2raw) + ' (sin redondeo)';
+      document.getElementById('rfinal').textContent = estaRedondeado ? '$ ' + fmtEntero(p2) : '$ ' + fmt(p2);
       document.getElementById('rtotal').textContent = 'Incremento total: $ ' + fmt(totalInc) + ' (' + totalPct.toFixed(4) + '%)';
 
       results.style.display = 'block';
