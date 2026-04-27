@@ -1,265 +1,188 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculadora Chuky</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f5;
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 2rem 1rem;
-    }
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 2rem 1rem; min-height: 100vh; }
+.card { background: #12172e; border-radius: 16px; padding: 2rem; width: 100%; max-width: 480px; height: fit-content; }
+h1 { font-size: 18px; font-weight: 600; color: #fff; text-align: center; margin-bottom: 1.5rem; }
+.field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6b75a0; margin-bottom: 8px; }
+.input-row { display: flex; align-items: center; background: #1e2540; border: 1px solid #2d3558; border-radius: 10px; padding: 0 14px; margin-bottom: 0.5rem; }
+.input-row input { flex: 1; font-size: 18px; padding: 12px 0; border: none; outline: none; color: #fff; background: transparent; font-family: inherit; }
+.input-row input::placeholder { color: #3d4870; }
+.input-row .unit { font-size: 13px; color: #4a5580; }
+.hint { font-size: 13px; color: #3d4870; text-align: center; padding: 1.25rem 0 0.5rem; }
 
-    .card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 2rem;
-      width: 100%;
-      max-width: 480px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    }
+.results { display: none; margin-top: 1.25rem; }
 
-    h1 { font-size: 18px; font-weight: 600; color: #1a1a1a; margin-bottom: 1.5rem; }
+.detail-block { background: #1a2040; border-radius: 10px; padding: 0 1rem; margin-bottom: 0.875rem; }
+.detail-row { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #222a50; }
+.detail-row:last-child { border-bottom: none; }
+.detail-label { font-size: 13px; color: #6b75a0; }
+.detail-value { font-size: 14px; font-weight: 600; color: #c8cde8; }
+.badge { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 5px; background: #2e2500; color: #c8a020; margin-left: 5px; vertical-align: middle; font-weight: 500; }
+.inc { color: #4caf82; }
 
-    label { font-size: 13px; color: #666; display: block; margin-bottom: 6px; }
+.flete-block { background: #1a1f3c; border: 1px solid #2d3460; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
+.flete-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.flete-title { font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6b75a0; }
+.flete-value { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.5px; text-align: center; margin-bottom: 4px; }
+.flete-sub { font-size: 12px; color: #404870; text-align: center; }
 
-    .input-row { display: flex; gap: 8px; align-items: center; margin-bottom: 1.5rem; }
+.final-block { background: #1a2040; border-radius: 10px; padding: 1rem; margin-bottom: 0.875rem; }
+.final-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.final-label { font-size: 13px; color: #6b75a0; }
+.final-value { font-size: 30px; font-weight: 700; color: #fff; text-align: right; }
+.final-note { font-size: 12px; color: #404870; text-align: right; margin-top: 4px; }
 
-    input[type="number"] {
-      flex: 1;
-      font-size: 18px;
-      padding: 10px 14px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      outline: none;
-      color: #1a1a1a;
-      background: #fafafa;
-      -moz-appearance: textfield;
-    }
+.nota { background: #1e1a00; border: 1px solid #3a3000; border-radius: 10px; padding: 10px 14px; }
+.nota p { font-size: 12px; color: #a08020; line-height: 1.55; }
+.nota strong { color: #c8a030; font-weight: 600; }
 
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+.copy-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 5px 10px; border-radius: 7px; border: 1px solid #2d3558; background: #1a2040; color: #6b75a0; cursor: pointer; font-family: inherit; transition: all 0.12s; white-space: nowrap; }
+.copy-btn:hover { background: #222a50; color: #9aa0c8; }
+.copy-btn.copied { color: #4caf82; border-color: #2a6048; }
+.copy-icon { width: 12px; height: 12px; flex-shrink: 0; }
+</style>
 
-    input[type="number"]:focus { border-color: #555; background: #fff; }
+<div class="card">
+  <h2 class="sr-only" style="position:absolute;left:-9999px">Calculadora de porcentajes de reexpediciones</h2>
+  <h1>Calculadora de porcentajes</h1>
 
-    .unit { font-size: 13px; color: #888; }
-
-    .results { display: none; }
-
-    .result-block {
-      background: #f8f8f8;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 10px;
-    }
-
-    .step-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 7px 0;
-      border-bottom: 1px solid #ebebeb;
-    }
-
-    .step-row:last-child { border-bottom: none; }
-
-    .step-label { font-size: 13px; color: #666; }
-    .step-value { font-size: 15px; font-weight: 600; color: #1a1a1a; }
-
-    .badge {
-      display: inline-block;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 6px;
-      background: #fff3cd;
-      color: #856404;
-      margin-left: 5px;
-      vertical-align: middle;
-    }
-
-    .inc { color: #2a7a4f; }
-
-    .flete-block {
-      background: #1a1a2e;
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .flete-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #a0a8c0;
-      margin-bottom: 8px;
-    }
-
-    .flete-value { font-size: 36px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
-    .flete-sub { font-size: 12px; color: #6b7490; margin-top: 6px; }
-
-    .final-block {
-      background: #ffffff;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 10px;
-    }
-
-    .final-row { display: flex; justify-content: space-between; align-items: baseline; }
-    .final-label { font-size: 14px; color: #666; }
-    .final-value { font-size: 28px; font-weight: 700; color: #1a1a1a; }
-    .total-note { text-align: right; font-size: 12px; color: #999; margin-top: 4px; }
-
-    .nota-block {
-      background: #fffbea;
-      border: 1px solid #f0d060;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 10px;
-    }
-
-    .nota-block p { font-size: 12px; color: #7a6200; line-height: 1.5; }
-    .nota-block strong { font-weight: 600; }
-
-    .hint { font-size: 13px; color: #aaa; text-align: center; padding: 1.5rem 0; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Calculadora de porcentajes</h1>
-
-    <label>Total de reexpediciones</label>
-    <div class="input-row">
-      <input type="number" id="inputVal" placeholder="Ej: 660000" step="any" oninput="calcular()" />
-      <span class="unit">COP</span>
-    </div>
-
-    <div class="results" id="results">
-
-      <div class="result-block">
-        <div class="step-row">
-          <span class="step-label">Total de reexpediciones</span>
-          <span class="step-value" id="r0">—</span>
-        </div>
-        <div class="step-row">
-          <span class="step-label">+ 1.4%</span>
-          <span class="step-value" id="r1raw">—</span>
-        </div>
-        <div class="step-row">
-          <span class="step-label">Redondeado al siguiente múltiplo de 1.000 <span class="badge">paso 1</span></span>
-          <span class="step-value" id="r1">—</span>
-        </div>
-      </div>
-
-      <div class="flete-block">
-        <div class="flete-title">Valor real del flete</div>
-        <div class="flete-value" id="rflete">—</div>
-        <div class="flete-sub">Redondeado al siguiente múltiplo de 1.000</div>
-      </div>
-
-      <div class="result-block">
-        <div class="step-row">
-          <span class="step-label">Incremento del + 1.4343%</span>
-          <span class="step-value inc" id="r2inc">—</span>
-        </div>
-        <div class="step-row">
-          <span class="step-label">Resultado paso 2 (con decimales)</span>
-          <span class="step-value" id="r2raw">—</span>
-        </div>
-        <div class="step-row">
-          <span class="step-label">Resultado paso 2 (redondeado)</span>
-          <span class="step-value" id="r2">—</span>
-        </div>
-      </div>
-
-      <div class="final-block">
-        <div class="final-row">
-          <span class="final-label">Resultado final</span>
-          <span class="final-value" id="rfinal">—</span>
-        </div>
-        <p class="total-note" id="rtotal">—</p>
-      </div>
-
-      <div class="nota-block">
-        <p><strong>Nota:</strong> El resultado final se redondea al entero siguiente solo si el primer decimal es 9. Ejemplo: 514.271,9 → 514.272</p>
-      </div>
-
-    </div>
-
-    <p class="hint" id="hint">Ingresa un valor para ver el desglose</p>
+  <div class="field-label">Total de reexpediciones</div>
+  <div class="input-row">
+    <input type="text" id="inputVal" placeholder="Ej: 6.520.000" oninput="onInput(this)" />
+    <span class="unit">COP</span>
   </div>
 
-  <script>
-    function fmt(n) {
-      return new Intl.NumberFormat('es-CO', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(n);
-    }
+  <p class="hint" id="hint">Ingresa un valor para ver el desglose</p>
 
-    function fmtEntero(n) {
-      return new Intl.NumberFormat('es-CO', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(n);
-    }
+  <div class="results" id="results">
 
-    function siguienteMultiplo1000(n) {
-      return Math.ceil(n / 1000) * 1000;
-    }
+    <div class="detail-block">
+      <div class="detail-row">
+        <span class="detail-label">Total de reexpediciones</span>
+        <span class="detail-value" id="r0">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">+ 1.4%</span>
+        <span class="detail-value" id="r1raw">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Redondeado al siguiente múltiplo de 1.000 <span class="badge">paso 1</span></span>
+        <span class="detail-value" id="r1">—</span>
+      </div>
+    </div>
 
-    // Redondea al entero siguiente solo si el primer decimal es 9
-    function redondearSi9(n) {
-      const primerDecimal = Math.floor((n * 10) % 10);
-      if (primerDecimal === 9) {
-        return Math.ceil(n);
-      }
-      return n;
-    }
+    <div class="flete-block">
+      <div class="flete-top">
+        <div class="flete-title">Valor real del flete</div>
+        <button class="copy-btn" id="btnFlete" onclick="copiarFlete()">
+          <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 00-1 1v7a1 1 0 001 1h2"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="flete-value" id="rflete">—</div>
+      <div class="flete-sub">Redondeado al siguiente múltiplo de 1.000</div>
+    </div>
 
-    function calcular() {
-      const raw = parseFloat(document.getElementById('inputVal').value);
-      const results = document.getElementById('results');
-      const hint = document.getElementById('hint');
+    <div class="detail-block">
+      <div class="detail-row">
+        <span class="detail-label">Incremento del + 1.4343%</span>
+        <span class="detail-value inc" id="r2inc">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Resultado paso 2 (con decimales)</span>
+        <span class="detail-value" id="r2raw">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Resultado paso 2 (redondeado)</span>
+        <span class="detail-value" id="r2">—</span>
+      </div>
+    </div>
 
-      if (isNaN(raw) || raw === 0) {
-        results.style.display = 'none';
-        hint.style.display = 'block';
-        return;
-      }
+    <div class="final-block">
+      <div class="final-top">
+        <span class="final-label">Resultado final</span>
+        <button class="copy-btn" id="btnFinal" onclick="copiarFinal()">
+          <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 00-1 1v7a1 1 0 001 1h2"/></svg>
+          Copiar sin decimales
+        </button>
+      </div>
+      <div class="final-value" id="rfinal">—</div>
+      <div class="final-note" id="rtotal">—</div>
+    </div>
 
-      const p1raw = raw * 1.014;
-      const p1 = siguienteMultiplo1000(p1raw);
-      const p2raw = p1 * 1.014343;
-      const p2 = redondearSi9(p2raw);
-      const inc2 = p2raw - p1;
-      const totalInc = p2 - raw;
-      const totalPct = ((p2 / raw) - 1) * 100;
+    <div class="nota">
+      <p><strong>Nota:</strong> El resultado final se redondea al entero siguiente solo si el primer decimal es 9. Ejemplo: 514.271,9 → 514.272</p>
+    </div>
 
-      const estaRedondeado = Number.isInteger(p2);
+  </div>
+</div>
 
-      document.getElementById('r0').textContent = '$ ' + fmt(raw);
-      document.getElementById('r1raw').textContent = '$ ' + fmt(p1raw);
-      document.getElementById('r1').textContent = '$ ' + fmtEntero(p1);
-      document.getElementById('rflete').textContent = '$ ' + fmtEntero(p1);
-      document.getElementById('r2inc').textContent = '+ $ ' + fmt(inc2);
-      document.getElementById('r2raw').textContent = '$ ' + fmt(p2raw);
-      document.getElementById('r2').textContent = estaRedondeado ? '$ ' + fmtEntero(p2) + ' (redondeado)' : '$ ' + fmt(p2raw) + ' (sin redondeo)';
-      document.getElementById('rfinal').textContent = estaRedondeado ? '$ ' + fmtEntero(p2) : '$ ' + fmt(p2);
-      document.getElementById('rtotal').textContent = 'Incremento total: $ ' + fmt(totalInc) + ' (' + totalPct.toFixed(4) + '%)';
+<script>
+let rawFlete = 0, rawFinal = 0;
 
-      results.style.display = 'block';
-      hint.style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+function fmt(n) {
+  return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+}
+function fmtInt(n) {
+  return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+}
+function ceil1000(n) { return Math.ceil(n / 1000) * 1000; }
+function redondearSi9(n) {
+  return Math.floor((n * 10) % 10) === 9 ? Math.ceil(n) : n;
+}
+
+function onInput(el) {
+  const prev = el.value, pos = el.selectionStart;
+  const digits = prev.replace(/[^\d]/g, '');
+  if (!digits) { el.value = ''; calcular(''); return; }
+  const formatted = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(parseInt(digits, 10));
+  el.value = formatted;
+  const diff = formatted.length - prev.length;
+  el.setSelectionRange(pos + diff, pos + diff);
+  calcular(digits);
+}
+
+function calcular(digits) {
+  const raw = parseFloat(digits);
+  const res = document.getElementById('results');
+  const hint = document.getElementById('hint');
+  if (!digits || isNaN(raw) || raw === 0) {
+    res.style.display = 'none'; hint.style.display = 'block';
+    rawFlete = 0; rawFinal = 0; return;
+  }
+  const p1raw = raw * 1.014;
+  const p1 = ceil1000(p1raw);
+  const p2raw = p1 * 1.014343;
+  const p2 = redondearSi9(p2raw);
+  const inc2 = p2raw - p1;
+  const totalInc = p2 - raw;
+  const totalPct = ((p2 / raw) - 1) * 100;
+  const isInt = Number.isInteger(p2);
+  rawFlete = p1; rawFinal = Math.round(p2);
+
+  document.getElementById('r0').textContent = '$ ' + fmt(raw);
+  document.getElementById('r1raw').textContent = '$ ' + fmt(p1raw);
+  document.getElementById('r1').textContent = '$ ' + fmtInt(p1);
+  document.getElementById('rflete').textContent = '$ ' + fmtInt(p1);
+  document.getElementById('r2inc').textContent = '+ $ ' + fmt(inc2);
+  document.getElementById('r2raw').textContent = '$ ' + fmt(p2raw);
+  document.getElementById('r2').textContent = isInt ? '$ ' + fmtInt(p2) + ' (redondeado)' : '$ ' + fmt(p2raw) + ' (sin redondeo)';
+  document.getElementById('rfinal').textContent = isInt ? '$ ' + fmtInt(p2) : '$ ' + fmt(p2);
+  document.getElementById('rtotal').textContent = 'Incremento total: $ ' + fmt(totalInc) + ' (' + totalPct.toFixed(4) + '%)';
+
+  res.style.display = 'block'; hint.style.display = 'none';
+}
+
+function copiar(texto, btnId) {
+  navigator.clipboard.writeText(texto).then(() => {
+    const btn = document.getElementById(btnId);
+    const prev = btn.innerHTML;
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l3 3 7-7"/></svg> Copiado';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = prev; }, 1800);
+  });
+}
+function copiarFlete() { if (rawFlete) copiar(String(rawFlete), 'btnFlete'); }
+function copiarFinal() { if (rawFinal) copiar(String(rawFinal), 'btnFinal'); }
+</script>
