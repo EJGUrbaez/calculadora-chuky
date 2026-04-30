@@ -41,29 +41,56 @@
   .total-value { font-size: 17px; font-weight: 700; color: #fff; font-family: 'Sora', sans-serif; }
   .hint { font-size: 13px; color: #fff; text-align: center; padding: 1rem 0 0.5rem; font-family: 'Sora', sans-serif; }
   .results { display: none; }
+
+  /* Paso 1 */
   .detail-block { background: #1a2040; border-radius: 10px; padding: 0 1rem; margin-bottom: 0.875rem; }
   .detail-row { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #222a50; }
   .detail-row:last-child { border-bottom: none; }
   .detail-label { font-size: 13px; color: #fff; font-family: 'Sora', sans-serif; }
   .detail-value { font-size: 14px; font-weight: 600; color: #fff; font-family: 'Sora', sans-serif; }
   .badge { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 5px; background: #2e2500; color: #c8a020; margin-left: 5px; vertical-align: middle; font-weight: 500; font-family: 'Sora', sans-serif; }
-  .inc { color: #4caf82; }
-  .flete-block { background: #1a1f3c; border: 1px solid #2d3460; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
+  .badge-blue { background: #0a2040; color: #4090e0; }
+
+  /* Bloque objetivo (resultado paso 1) */
+  .objetivo-block { background: #1a2040; border: 1px solid #2d3558; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
+  .objetivo-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .objetivo-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; font-family: 'Sora', sans-serif; }
+  .objetivo-value { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.5px; text-align: center; margin-bottom: 4px; font-family: 'Sora', sans-serif; }
+  .objetivo-sub { font-size: 12px; color: #8898c0; text-align: center; font-family: 'Sora', sans-serif; }
+
+  /* Bloque flete (resultado paso 2) */
+  .flete-block { background: #0f2a1a; border: 1px solid #1a4a2a; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
   .flete-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .flete-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; font-family: 'Sora', sans-serif; }
-  .flete-value { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.5px; text-align: center; margin-bottom: 4px; font-family: 'Sora', sans-serif; }
-  .flete-sub { font-size: 12px; color: #fff; text-align: center; font-family: 'Sora', sans-serif; }
-  .final-block { background: #1a2040; border-radius: 10px; padding: 1rem; margin-bottom: 0.875rem; }
-  .final-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .final-label { font-size: 13px; color: #fff; font-family: 'Sora', sans-serif; }
-  .final-value { font-size: 30px; font-weight: 700; color: #fff; text-align: right; font-family: 'Sora', sans-serif; }
-  .final-note { font-size: 12px; color: #fff; text-align: right; margin-top: 4px; font-family: 'Sora', sans-serif; }
-  .nota { background: #1e1a00; border: 1px solid #3a3000; border-radius: 10px; padding: 10px 14px; }
-  .nota p { font-size: 12px; color: #a08020; line-height: 1.55; font-family: 'Sora', sans-serif; }
-  .nota strong { color: #c8a030; font-weight: 600; }
+  .flete-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #4caf82; font-family: 'Sora', sans-serif; }
+  .flete-value { font-size: 38px; font-weight: 700; color: #4cff9a; letter-spacing: -0.5px; text-align: center; margin-bottom: 4px; font-family: 'Sora', sans-serif; }
+  .flete-sub { font-size: 12px; color: #4caf82; text-align: center; font-family: 'Sora', sans-serif; }
+
+  /* Verificación */
+  .verif-block { background: #1a2040; border-radius: 10px; padding: 0 1rem; margin-bottom: 0.875rem; }
+  .verif-title { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6b75a0; padding: 10px 0 4px; font-family: 'Sora', sans-serif; }
+  .verif-ok  { color: #4caf82; font-size: 13px; font-weight: 600; }
+  .verif-err { color: #ff6060; font-size: 13px; font-weight: 600; }
+
+  /* Probador manual */
+  .manual-block { background: #1a1a2e; border: 1px solid #3a2a58; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
+  .manual-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #b07ae0; margin-bottom: 12px; font-family: 'Sora', sans-serif; }
+  .manual-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .manual-input-wrap { display: flex; align-items: center; background: #12172e; border: 1px solid #3a2a58; border-radius: 10px; padding: 0 10px; flex: 1; gap: 4px; }
+  .manual-input-wrap:focus-within { border-color: #7a50c0; }
+  .manual-input { flex: 1; font-size: 15px; font-weight: 600; font-family: 'Sora', sans-serif; padding: 10px 0; border: none; outline: none; color: #fff; background: transparent; }
+  .manual-input::placeholder { color: #4a3a70; font-weight: 400; }
+  .manual-result { background: #12172e; border-radius: 10px; padding: 10px 12px; }
+  .manual-result-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+  .manual-result-label { font-size: 12px; color: #8898c0; font-family: 'Sora', sans-serif; }
+  .manual-result-value { font-size: 14px; font-weight: 600; color: #fff; font-family: 'Sora', sans-serif; }
+  .manual-badge-ok  { color: #4cff9a; }
+  .manual-badge-err { color: #ff6060; }
+
   .copy-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 5px 10px; border-radius: 7px; border: 1px solid #2d3558; background: #1a2040; color: #fff; cursor: pointer; font-family: 'Sora', sans-serif; transition: all 0.12s; white-space: nowrap; }
   .copy-btn:hover { background: #222a50; }
   .copy-btn.copied { color: #4caf82; border-color: #2a6048; }
+  .copy-btn-green { border-color: #1a4a2a; background: #0f2a1a; color: #4caf82; }
+  .copy-btn-green:hover { background: #1a3a24; }
   .copy-icon { width: 12px; height: 12px; flex-shrink: 0; }
 </style>
 </head>
@@ -109,6 +136,8 @@
   <p class="hint" id="hint">Ingresa valores para ver el desglose</p>
 
   <div class="results" id="results">
+
+    <!-- Paso 1: sumar + 1.4% y redondear -->
     <div class="detail-block">
       <div class="detail-row">
         <span class="detail-label">Total de reexpediciones</span>
@@ -124,62 +153,110 @@
       </div>
     </div>
 
+    <!-- Objetivo = resultado paso 1 (Valor Cancelar en Silogtran) -->
+    <div class="objetivo-block">
+      <div class="objetivo-top">
+        <div class="objetivo-title">Valor Cancelar objetivo</div>
+        <button class="copy-btn" id="btnObjetivo" onclick="copiarObjetivo()">
+          <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
+          </svg>
+          Copiar
+        </button>
+      </div>
+      <div class="objetivo-value" id="robjetivo">—</div>
+      <div class="objetivo-sub">Lo que debe quedar en "Valor Cancelar" de Silogtran</div>
+    </div>
+
+    <!-- Paso 2: cálculo del Flete a ingresar -->
+    <div class="detail-block">
+      <div class="detail-row">
+        <span class="detail-label">Impuesto Silogtran (1.514%) <span class="badge badge-blue">paso 2</span></span>
+        <span class="detail-value" id="r2imp">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Flete = Objetivo ÷ (1 − 1.514%)</span>
+        <span class="detail-value" id="r2raw">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Flete redondeado al entero siguiente</span>
+        <span class="detail-value" id="r2">—</span>
+      </div>
+    </div>
+
+    <!-- Flete a ingresar en Silogtran -->
     <div class="flete-block">
       <div class="flete-top">
-        <div class="flete-title">Valor real del flete</div>
-        <button class="copy-btn" id="btnFlete" onclick="copiarFlete()">
+        <div class="flete-title">Flete a ingresar en Silogtran</div>
+        <button class="copy-btn copy-btn-green" id="btnFlete" onclick="copiarFlete()">
           <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 00-1 1v7a1 1 0 001 1h2"/>
+            <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
           </svg>
           Copiar
         </button>
       </div>
       <div class="flete-value" id="rflete">—</div>
-      <div class="flete-sub">Redondeado al siguiente múltiplo de 1.000</div>
+      <div class="flete-sub">Silogtran calculará el impuesto y el Valor Cancelar resultante será el objetivo</div>
     </div>
 
-    <div class="detail-block">
+    <!-- Verificación -->
+    <div class="verif-block">
+      <div class="verif-title">Verificación</div>
       <div class="detail-row">
-        <span class="detail-label">Incremento del + 1.4343%</span>
-        <span class="detail-value inc" id="r2inc">—</span>
+        <span class="detail-label">Flete − Impuesto (1.514%)</span>
+        <span class="detail-value verif-ok" id="vVerif">—</span>
       </div>
       <div class="detail-row">
-        <span class="detail-label">Resultado paso 2 (con decimales)</span>
-        <span class="detail-value" id="r2raw">—</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Resultado paso 2 (redondeado)</span>
-        <span class="detail-value" id="r2">—</span>
+        <span class="detail-label">¿Coincide con el objetivo?</span>
+        <span class="detail-value verif-ok" id="vCoincide">—</span>
       </div>
     </div>
 
-    <div class="final-block">
-      <div class="final-top">
-        <span class="final-label">Resultado final</span>
-        <button class="copy-btn" id="btnFinal" onclick="copiarFinal()">
-          <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
-          </svg>
-          Copiar sin decimales
-        </button>
+    <!-- Probador manual de flete -->
+    <div class="manual-block">
+      <div class="manual-title">🔬 Probador manual de flete</div>
+      <div class="manual-row">
+        <div class="manual-input-wrap">
+          <span class="value-prefix">$</span>
+          <input type="text" class="manual-input" id="manualFlete" placeholder="Ingresa un flete a probar" oninput="onManualInput(this)" />
+          <button class="copy-btn" id="btnManualVC" onclick="copiarManualVC()" style="display:none;border:none;background:transparent;padding:4px 6px;">
+            <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
+            </svg>
+          </button>
+          <span class="unit-lbl">COP</span>
+        </div>
       </div>
-      <div class="final-value" id="rfinal">—</div>
-      <div class="final-note" id="rtotal">—</div>
+      <div class="manual-result" id="manualResult" style="display:none">
+        <div class="manual-result-row">
+          <span class="manual-result-label">Impuesto (1.514%)</span>
+          <span class="manual-result-value" id="mImp">—</span>
+        </div>
+        <div class="manual-result-row">
+          <span class="manual-result-label">Valor Cancelar resultante</span>
+          <span class="manual-result-value" id="mVC">—</span>
+        </div>
+        <div class="manual-result-row">
+          <span class="manual-result-label">Objetivo actual</span>
+          <span class="manual-result-value" id="mObj">—</span>
+        </div>
+        <div class="manual-result-row">
+          <span class="manual-result-label">¿Cierra exacto?</span>
+          <span class="manual-result-value" id="mOK">—</span>
+        </div>
+      </div>
     </div>
 
-    <div class="nota">
-      <p><strong>Nota:</strong> El resultado final se redondea al entero siguiente solo si el primer decimal es 9. Ejemplo: 514.271,9 → 514.272</p>
-    </div>
   </div>
 </div>
 
 <script>
-let rawFlete = 0, rawFinal = 0, rowCount = 0;
+let rawObjetivo = 0, rawFlete = 0, rowCount = 0, rawManualVC = 0;
+const IMP_PCT = 0.01514; // porcentaje fijo que usa Silogtran para el impuesto
 
 function fmt(n) { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n); }
 function fmtInt(n) { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n); }
 function ceil1000(n) { return Math.ceil(n / 1000) * 1000; }
-function redondearSi9(n) { return Math.floor((n * 10) % 10) === 9 ? Math.ceil(n) : n; }
 
 function addRow() {
   rowCount++;
@@ -231,34 +308,127 @@ function recalcTotal() {
   calcular(raw);
 }
 
+// Simula exactamente lo que hace Silogtran: round(flete * 1.514%) luego resta
+function silogtranVC(flete) {
+  return flete - Math.round(flete * IMP_PCT);
+}
+
+// Búsqueda exacta: encuentra el flete más pequeño >= fleteBase tal que VC == objetivo.
+// Si ninguno lo logra en el rango razonable, devuelve el que produce VC más cercano por arriba.
+function buscarFleteExacto(objetivo) {
+  const fleteBase = Math.ceil(objetivo / (1 - IMP_PCT));
+  // Buscar en rango [-2, +20] respecto al piso matemático
+  for (let delta = 0; delta <= 20; delta++) {
+    const f = fleteBase + delta;
+    if (silogtranVC(f) === objetivo) return { flete: f, exacto: true };
+  }
+  // Fallback: buscar el más pequeño cuyo VC >= objetivo (siempre cerrado)
+  for (let delta = 0; delta <= 50; delta++) {
+    const f = fleteBase + delta;
+    if (silogtranVC(f) >= objetivo) return { flete: f, exacto: false };
+  }
+  return { flete: fleteBase, exacto: false };
+}
+
 function calcular(raw) {
   const res = document.getElementById('results');
   const hint = document.getElementById('hint');
   if (!raw || raw === 0) {
     res.style.display = 'none'; hint.style.display = 'block';
-    rawFlete = 0; rawFinal = 0; return;
+    rawObjetivo = 0; rawFlete = 0; return;
   }
-  const p1raw = raw * 1.014;
-  const p1 = ceil1000(p1raw);
-  const p2raw = p1 * 1.014343;
-  const p2 = redondearSi9(p2raw);
-  const inc2 = p2raw - p1;
-  const totalInc = p2 - raw;
-  const totalPct = ((p2 / raw) - 1) * 100;
-  const isInt = Number.isInteger(p2);
-  rawFlete = p1; rawFinal = Math.round(p2);
 
-  document.getElementById('r0').textContent = '$ ' + fmt(raw);
+  // ── Paso 1: sumar 1.4% y redondear al siguiente múltiplo de 1.000 ──────────
+  const p1raw = raw * 1.014;
+  const objetivo = ceil1000(p1raw);
+
+  // ── Paso 2: búsqueda exacta del flete ───────────────────────────────────────
+  const { flete, exacto } = buscarFleteExacto(objetivo);
+  const fleteExacto = objetivo / (1 - IMP_PCT); // para mostrar en UI
+
+  // Verificación con la fórmula exacta de Silogtran
+  const impuesto    = Math.round(flete * IMP_PCT);
+  const valorCancelar = flete - impuesto;
+  const coincide    = valorCancelar === objetivo;
+
+  rawObjetivo = objetivo;
+  rawFlete    = flete;
+
+  // Actualizar UI — Paso 1
+  document.getElementById('r0').textContent    = '$ ' + fmtInt(raw);
   document.getElementById('r1raw').textContent = '$ ' + fmt(p1raw);
-  document.getElementById('r1').textContent = '$ ' + fmtInt(p1);
-  document.getElementById('rflete').textContent = '$ ' + fmtInt(p1);
-  document.getElementById('r2inc').textContent = '+ $ ' + fmt(inc2);
-  document.getElementById('r2raw').textContent = '$ ' + fmt(p2raw);
-  document.getElementById('r2').textContent = isInt ? '$ ' + fmtInt(p2) + ' (redondeado)' : '$ ' + fmt(p2raw) + ' (sin redondeo)';
-  document.getElementById('rfinal').textContent = isInt ? '$ ' + fmtInt(p2) : '$ ' + fmt(p2);
-  document.getElementById('rtotal').textContent = 'Incremento total: $ ' + fmt(totalInc) + ' (' + totalPct.toFixed(4) + '%)';
+  document.getElementById('r1').textContent    = '$ ' + fmtInt(objetivo);
+
+  // Objetivo
+  document.getElementById('robjetivo').textContent = '$ ' + fmtInt(objetivo);
+
+  // Paso 2
+  document.getElementById('r2imp').textContent = '$ ' + fmt(objetivo * IMP_PCT);
+  document.getElementById('r2raw').textContent = '$ ' + fmt(fleteExacto);
+  document.getElementById('r2').textContent    = '$ ' + fmtInt(flete);
+
+  // Flete
+  document.getElementById('rflete').textContent  = '$ ' + fmtInt(flete);
+  document.getElementById('rflete-sub') && (document.getElementById('rflete-sub').textContent =
+    exacto ? 'Valor Cancelar resultante será exactamente el objetivo'
+           : 'Valor Cancelar resultante cubre el objetivo (cierra sin faltante)');
+
+  // Verificación
+  document.getElementById('vVerif').textContent    = '$ ' + fmtInt(valorCancelar);
+  document.getElementById('vCoincide').textContent = coincide
+    ? '✓ Exacto — Valor Cancelar = $ ' + fmtInt(objetivo)
+    : (valorCancelar > objetivo
+        ? '✓ Cerrado — sobra $ ' + fmtInt(valorCancelar - objetivo)
+        : '⚠ Faltante de $ ' + fmtInt(objetivo - valorCancelar));
+  document.getElementById('vCoincide').className = 'detail-value ' + (valorCancelar >= objetivo ? 'verif-ok' : 'verif-err');
 
   res.style.display = 'block'; hint.style.display = 'none';
+}
+
+// ── Probador manual ──────────────────────────────────────────────────────────
+function onManualInput(el) {
+  const prev = el.value, pos = el.selectionStart;
+  const digits = prev.replace(/[^\d]/g, '');
+  if (!digits) {
+    el.value = '';
+    document.getElementById('manualResult').style.display = 'none';
+    return;
+  }
+  const formatted = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(parseInt(digits, 10));
+  el.value = formatted;
+  const diff = formatted.length - prev.length;
+  el.setSelectionRange(pos + diff, pos + diff);
+
+  const flete = parseInt(digits, 10);
+  const imp   = Math.round(flete * IMP_PCT);
+  const vc    = flete - imp;
+  const obj   = rawObjetivo;
+
+  rawManualVC = vc;
+
+  document.getElementById('mImp').textContent = '$ ' + fmtInt(imp);
+  document.getElementById('mVC').textContent  = '$ ' + fmtInt(vc);
+  document.getElementById('mObj').textContent = obj ? '$ ' + fmtInt(obj) : '(calcula primero arriba)';
+
+  if (obj) {
+    const ok = vc === obj;
+    const cerrado = vc > obj;
+    document.getElementById('mOK').textContent  = ok ? '✓ Exacto' : (cerrado ? '✓ Cerrado (+$' + fmtInt(vc - obj) + ')' : '✗ Faltante ($' + fmtInt(obj - vc) + ')');
+    document.getElementById('mOK').className    = 'manual-result-value ' + (vc >= obj ? 'manual-badge-ok' : 'manual-badge-err');
+  } else {
+    document.getElementById('mOK').textContent = '—';
+    document.getElementById('mOK').className   = 'manual-result-value';
+  }
+
+  document.getElementById('btnManualVC').style.display = vc > 0 ? 'inline-flex' : 'none';
+  document.getElementById('manualResult').style.display = 'block';
+}
+
+function copiarManualVC() {
+  const el = document.getElementById('manualFlete');
+  const digits = el.value.replace(/[^\d]/g, '');
+  if (!digits) return;
+  copiar(digits, 'btnManualVC');
 }
 
 function copiarLista() {
@@ -266,15 +436,12 @@ function copiarLista() {
   const placa = document.getElementById('inputPlaca').value.trim().toUpperCase();
   const rows = document.querySelectorAll('.city-row');
   const lines = [];
-
-  // Header line
   if (manifiesto || placa) {
     let header = 'REEXPEDICIONES';
     if (manifiesto) header += ' DE MANIFIESTO ' + manifiesto;
     if (placa) header += ' DEL VEHICULO ' + placa;
     lines.push(header);
   }
-
   rows.forEach(row => {
     const id = row.id.replace('row-', '');
     const city = (document.getElementById('city-' + id) || {}).value || '';
@@ -285,7 +452,6 @@ function copiarLista() {
       lines.push((city.trim() || '(sin nombre)').toUpperCase() + ' $' + valFmt);
     }
   });
-
   if (!lines.length) return;
   navigator.clipboard.writeText(lines.join('\n')).then(() => {
     const btn = document.getElementById('btnCopyList');
@@ -305,8 +471,9 @@ function copiar(texto, btnId) {
     setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = prev; }, 1800);
   });
 }
-function copiarFlete() { if (rawFlete) copiar(String(rawFlete), 'btnFlete'); }
-function copiarFinal() { if (rawFinal) copiar(String(rawFinal), 'btnFinal'); }
+
+function copiarObjetivo() { if (rawObjetivo) copiar(String(rawObjetivo), 'btnObjetivo'); }
+function copiarFlete()    { if (rawFlete)    copiar(String(rawFlete),    'btnFlete');    }
 
 addRow();
 </script>
