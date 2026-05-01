@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Sora', sans-serif; background: #0b0f1e; min-height: 100vh; display: flex; justify-content: center; padding: 2rem 1rem; color: #fff; }
+  body { font-family: 'Sora', sans-serif; background: #0b0f1e; min-height: 100vh; display: flex; justify-content: center; padding: 2rem 1rem 5rem; color: #fff; }
   .card { background: #12172e; border-radius: 18px; padding: 2rem 1.75rem; width: 100%; max-width: 480px; height: fit-content; }
   .app-title { font-size: 22px; font-weight: 700; color: #fff; text-align: center; margin-bottom: 1.75rem; letter-spacing: 0.01em; }
   .field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; margin-bottom: 12px; }
@@ -42,7 +42,6 @@
   .hint { font-size: 13px; color: #fff; text-align: center; padding: 1rem 0 0.5rem; font-family: 'Sora', sans-serif; }
   .results { display: none; }
 
-  /* Paso 1 */
   .detail-block { background: #1a2040; border-radius: 10px; padding: 0 1rem; margin-bottom: 0.875rem; }
   .detail-row { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #222a50; }
   .detail-row:last-child { border-bottom: none; }
@@ -51,27 +50,23 @@
   .badge { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 5px; background: #2e2500; color: #c8a020; margin-left: 5px; vertical-align: middle; font-weight: 500; font-family: 'Sora', sans-serif; }
   .badge-blue { background: #0a2040; color: #4090e0; }
 
-  /* Bloque objetivo (resultado paso 1) */
   .objetivo-block { background: #1a2040; border: 1px solid #2d3558; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
   .objetivo-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .objetivo-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; font-family: 'Sora', sans-serif; }
   .objetivo-value { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.5px; text-align: center; margin-bottom: 4px; font-family: 'Sora', sans-serif; }
   .objetivo-sub { font-size: 12px; color: #8898c0; text-align: center; font-family: 'Sora', sans-serif; }
 
-  /* Bloque flete (resultado paso 2) */
   .flete-block { background: #0f2a1a; border: 1px solid #1a4a2a; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
   .flete-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .flete-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #4caf82; font-family: 'Sora', sans-serif; }
   .flete-value { font-size: 38px; font-weight: 700; color: #4cff9a; letter-spacing: -0.5px; text-align: center; margin-bottom: 4px; font-family: 'Sora', sans-serif; }
   .flete-sub { font-size: 12px; color: #4caf82; text-align: center; font-family: 'Sora', sans-serif; }
 
-  /* Verificación */
   .verif-block { background: #1a2040; border-radius: 10px; padding: 0 1rem; margin-bottom: 0.875rem; }
   .verif-title { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6b75a0; padding: 10px 0 4px; font-family: 'Sora', sans-serif; }
   .verif-ok  { color: #4caf82; font-size: 13px; font-weight: 600; }
   .verif-err { color: #ff6060; font-size: 13px; font-weight: 600; }
 
-  /* Probador manual */
   .manual-block { background: #1a1a2e; border: 1px solid #3a2a58; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 0.875rem; }
   .manual-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #b07ae0; margin-bottom: 12px; font-family: 'Sora', sans-serif; }
   .manual-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -92,6 +87,112 @@
   .copy-btn-green { border-color: #1a4a2a; background: #0f2a1a; color: #4caf82; }
   .copy-btn-green:hover { background: #1a3a24; }
   .copy-icon { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* ── Botón scroll-to-bottom ─────────────────────────── */
+  #scrollDownBtn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  /* Etiqueta de alerta */
+  #scrollDownBtn .scroll-label {
+    background: #ffcc00;
+    color: #0b0f1e;
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 5px 10px;
+    border-radius: 8px 8px 0 0;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    box-shadow: 0 -2px 10px rgba(255,204,0,0.3);
+  }
+
+  /* Círculo con flecha */
+  #scrollDownBtn .scroll-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #1e2540;
+    border: 2px solid #2d3558;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  #scrollDownBtn .scroll-circle svg {
+    transition: transform 0.25s;
+  }
+
+  /* Estado pulse / alerta activa */
+  #scrollDownBtn.alert-active .scroll-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #scrollDownBtn.alert-active .scroll-circle {
+    background: #ffcc00;
+    border-color: #ffcc00;
+    box-shadow: 0 0 0 0 rgba(255,204,0,0.5);
+    animation: pulseGlow 1.4s ease-in-out infinite;
+  }
+
+  #scrollDownBtn.alert-active .scroll-circle svg path,
+  #scrollDownBtn.alert-active .scroll-circle svg polyline {
+    stroke: #0b0f1e;
+  }
+
+  /* Hover */
+  #scrollDownBtn:hover .scroll-circle {
+    transform: scale(1.1);
+    border-color: #4a5580;
+  }
+
+  #scrollDownBtn.alert-active:hover .scroll-circle {
+    background: #ffe44d;
+    border-color: #ffe44d;
+    animation: none;
+    transform: scale(1.1);
+    box-shadow: 0 6px 28px rgba(255,204,0,0.45);
+  }
+
+  /* Animación de pulso */
+  @keyframes pulseGlow {
+    0%   { box-shadow: 0 0 0 0 rgba(255,204,0,0.55); }
+    50%  { box-shadow: 0 0 0 10px rgba(255,204,0,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); }
+  }
+
+  /* Bounce de entrada del botón */
+  @keyframes btnEntrada {
+    0%   { opacity: 0; transform: scale(0.5) translateY(20px); }
+    70%  { transform: scale(1.12) translateY(-4px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  #scrollDownBtn.show {
+    display: flex;
+    animation: btnEntrada 0.4s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+
+  /* Sentinel invisible al fondo de resultados */
+  #bottomSentinel { height: 1px; }
 </style>
 </head>
 <body>
@@ -137,7 +238,6 @@
 
   <div class="results" id="results">
 
-    <!-- Paso 1: sumar + 1.4% y redondear -->
     <div class="detail-block">
       <div class="detail-row">
         <span class="detail-label">Total de reexpediciones</span>
@@ -153,7 +253,6 @@
       </div>
     </div>
 
-    <!-- Objetivo = resultado paso 1 (Valor Cancelar en Silogtran) -->
     <div class="objetivo-block">
       <div class="objetivo-top">
         <div class="objetivo-title">Valor Cancelar objetivo</div>
@@ -168,7 +267,6 @@
       <div class="objetivo-sub">Lo que debe quedar en "Valor Cancelar" de Silogtran</div>
     </div>
 
-    <!-- Paso 2: cálculo del Flete a ingresar -->
     <div class="detail-block">
       <div class="detail-row">
         <span class="detail-label">Impuesto Silogtran (1.514%) <span class="badge badge-blue">paso 2</span></span>
@@ -184,7 +282,6 @@
       </div>
     </div>
 
-    <!-- Flete a ingresar en Silogtran -->
     <div class="flete-block">
       <div class="flete-top">
         <div class="flete-title">Flete a ingresar en Silogtran</div>
@@ -196,10 +293,9 @@
         </button>
       </div>
       <div class="flete-value" id="rflete">—</div>
-      <div class="flete-sub">Silogtran calculará el impuesto y el Valor Cancelar resultante será el objetivo</div>
+      <div class="flete-sub" id="rflete-sub">Silogtran calculará el impuesto y el Valor Cancelar resultante será el objetivo</div>
     </div>
 
-    <!-- Verificación -->
     <div class="verif-block">
       <div class="verif-title">Verificación</div>
       <div class="detail-row">
@@ -212,7 +308,6 @@
       </div>
     </div>
 
-    <!-- Probador manual de flete -->
     <div class="manual-block">
       <div class="manual-title">🔬 Probador manual de flete</div>
       <div class="manual-row">
@@ -247,17 +342,69 @@
       </div>
     </div>
 
+    <div id="bottomSentinel"></div>
+  </div><!-- /results -->
+</div><!-- /card -->
+
+<!-- Botón flotante scroll-to-bottom -->
+<button id="scrollDownBtn" onclick="scrollToBottom()" aria-label="Ver resultados completos">
+  <div class="scroll-label">⚡ Hay resultados abajo</div>
+  <div class="scroll-circle">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
   </div>
-</div>
+</button>
 
 <script>
 let rawObjetivo = 0, rawFlete = 0, rowCount = 0, rawManualVC = 0;
-const IMP_PCT = 0.01514; // porcentaje fijo que usa Silogtran para el impuesto
+const IMP_PCT = 0.01514;
 
-function fmt(n) { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n); }
+function fmt(n)    { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n); }
 function fmtInt(n) { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n); }
 function ceil1000(n) { return Math.ceil(n / 1000) * 1000; }
 
+// ── Botón scroll ──────────────────────────────────────────────────────────────
+const scrollBtn = document.getElementById('scrollDownBtn');
+let alertTimeout = null;
+let observerActive = false;
+
+function showScrollBtn(withAlert) {
+  scrollBtn.classList.add('show');
+  if (withAlert) {
+    scrollBtn.classList.add('alert-active');
+    clearTimeout(alertTimeout);
+    // La alerta se apaga sola si el usuario ya llegó al fondo o tras 6s
+    alertTimeout = setTimeout(() => {
+      scrollBtn.classList.remove('alert-active');
+    }, 6000);
+  }
+}
+
+function hideScrollBtn() {
+  scrollBtn.classList.remove('alert-active');
+  clearTimeout(alertTimeout);
+}
+
+function scrollToBottom() {
+  document.getElementById('bottomSentinel').scrollIntoView({ behavior: 'smooth', block: 'end' });
+  hideScrollBtn();
+}
+
+// IntersectionObserver: si el sentinel ya es visible, silencia la alerta
+function setupObserver() {
+  if (observerActive) return;
+  observerActive = true;
+  const sentinel = document.getElementById('bottomSentinel');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) hideScrollBtn();
+    });
+  }, { threshold: 0.5 });
+  observer.observe(sentinel);
+}
+
+// ── Filas de ciudad ───────────────────────────────────────────────────────────
 function addRow() {
   rowCount++;
   const id = rowCount;
@@ -282,7 +429,7 @@ function removeRow(id) {
   recalcTotal();
 }
 
-function onValInput(el, id) {
+function onValInput(el) {
   const prev = el.value, pos = el.selectionStart;
   const digits = prev.replace(/[^\d]/g, '');
   if (!digits) { el.value = ''; recalcTotal(); return; }
@@ -308,21 +455,16 @@ function recalcTotal() {
   calcular(raw);
 }
 
-// Simula exactamente lo que hace Silogtran: round(flete * 1.514%) luego resta
 function silogtranVC(flete) {
   return flete - Math.round(flete * IMP_PCT);
 }
 
-// Búsqueda exacta: encuentra el flete más pequeño >= fleteBase tal que VC == objetivo.
-// Si ninguno lo logra en el rango razonable, devuelve el que produce VC más cercano por arriba.
 function buscarFleteExacto(objetivo) {
   const fleteBase = Math.ceil(objetivo / (1 - IMP_PCT));
-  // Buscar en rango [-2, +20] respecto al piso matemático
   for (let delta = 0; delta <= 20; delta++) {
     const f = fleteBase + delta;
     if (silogtranVC(f) === objetivo) return { flete: f, exacto: true };
   }
-  // Fallback: buscar el más pequeño cuyo VC >= objetivo (siempre cerrado)
   for (let delta = 0; delta <= 50; delta++) {
     const f = fleteBase + delta;
     if (silogtranVC(f) >= objetivo) return { flete: f, exacto: false };
@@ -331,22 +473,24 @@ function buscarFleteExacto(objetivo) {
 }
 
 function calcular(raw) {
-  const res = document.getElementById('results');
+  const res  = document.getElementById('results');
   const hint = document.getElementById('hint');
+
   if (!raw || raw === 0) {
-    res.style.display = 'none'; hint.style.display = 'block';
-    rawObjetivo = 0; rawFlete = 0; return;
+    res.style.display = 'none';
+    hint.style.display = 'block';
+    scrollBtn.classList.remove('show', 'alert-active');
+    rawObjetivo = 0; rawFlete = 0;
+    return;
   }
 
-  // ── Paso 1: sumar 1.4% y redondear al siguiente múltiplo de 1.000 ──────────
-  const p1raw = raw * 1.014;
+  // Paso 1
+  const p1raw    = raw * 1.014;
   const objetivo = ceil1000(p1raw);
 
-  // ── Paso 2: búsqueda exacta del flete ───────────────────────────────────────
+  // Paso 2
   const { flete, exacto } = buscarFleteExacto(objetivo);
-  const fleteExacto = objetivo / (1 - IMP_PCT); // para mostrar en UI
-
-  // Verificación con la fórmula exacta de Silogtran
+  const fleteExacto = objetivo / (1 - IMP_PCT);
   const impuesto    = Math.round(flete * IMP_PCT);
   const valorCancelar = flete - impuesto;
   const coincide    = valorCancelar === objetivo;
@@ -354,128 +498,123 @@ function calcular(raw) {
   rawObjetivo = objetivo;
   rawFlete    = flete;
 
-  // Actualizar UI — Paso 1
+  // Mostrar resultados
+  const wasHidden = res.style.display === 'none' || res.style.display === '';
+  res.style.display = 'block';
+  hint.style.display = 'none';
+
+  // Actualizar campos
   document.getElementById('r0').textContent    = '$ ' + fmtInt(raw);
   document.getElementById('r1raw').textContent = '$ ' + fmt(p1raw);
   document.getElementById('r1').textContent    = '$ ' + fmtInt(objetivo);
-
-  // Objetivo
   document.getElementById('robjetivo').textContent = '$ ' + fmtInt(objetivo);
-
-  // Paso 2
   document.getElementById('r2imp').textContent = '$ ' + fmt(objetivo * IMP_PCT);
   document.getElementById('r2raw').textContent = '$ ' + fmt(fleteExacto);
   document.getElementById('r2').textContent    = '$ ' + fmtInt(flete);
+  document.getElementById('rflete').textContent = '$ ' + fmtInt(flete);
+  document.getElementById('rflete-sub').textContent = exacto
+    ? 'Valor Cancelar resultante será exactamente el objetivo'
+    : 'Aproximación: Valor Cancelar ≥ objetivo (diferencia mínima)';
 
-  // Flete
-  document.getElementById('rflete').textContent  = '$ ' + fmtInt(flete);
-  document.getElementById('rflete-sub') && (document.getElementById('rflete-sub').textContent =
-    exacto ? 'Valor Cancelar resultante será exactamente el objetivo'
-           : 'Valor Cancelar resultante cubre el objetivo (cierra sin faltante)');
+  const vVerifEl   = document.getElementById('vVerif');
+  const vCoincideEl = document.getElementById('vCoincide');
+  vVerifEl.textContent   = '$ ' + fmtInt(valorCancelar);
+  vVerifEl.className     = 'detail-value ' + (coincide ? 'verif-ok' : 'verif-err');
+  vCoincideEl.textContent = coincide ? '✓ Sí, perfecto' : '✗ No coincide';
+  vCoincideEl.className   = 'detail-value ' + (coincide ? 'verif-ok' : 'verif-err');
 
-  // Verificación
-  document.getElementById('vVerif').textContent    = '$ ' + fmtInt(valorCancelar);
-  document.getElementById('vCoincide').textContent = coincide
-    ? '✓ Exacto — Valor Cancelar = $ ' + fmtInt(objetivo)
-    : (valorCancelar > objetivo
-        ? '✓ Cerrado — sobra $ ' + fmtInt(valorCancelar - objetivo)
-        : '⚠ Faltante de $ ' + fmtInt(objetivo - valorCancelar));
-  document.getElementById('vCoincide').className = 'detail-value ' + (valorCancelar >= objetivo ? 'verif-ok' : 'verif-err');
+  // Verificar si el sentinel es visible antes de disparar la alerta
+  const sentinel = document.getElementById('bottomSentinel');
+  const rect = sentinel.getBoundingClientRect();
+  const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
 
-  res.style.display = 'block'; hint.style.display = 'none';
+  if (!isVisible) {
+    showScrollBtn(true);   // botón + alerta
+  } else {
+    showScrollBtn(false);  // botón sin alerta (ya se ve el fondo)
+  }
+
+  setupObserver();
 }
 
-// ── Probador manual ──────────────────────────────────────────────────────────
+// ── Copiar ────────────────────────────────────────────────────────────────────
+function copiarObjetivo() {
+  if (!rawObjetivo) return;
+  navigator.clipboard.writeText(String(rawObjetivo));
+  const btn = document.getElementById('btnObjetivo');
+  btn.classList.add('copied'); btn.textContent = '✓ Copiado';
+  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 00-1 1v7a1 1 0 001 1h2"/></svg>Copiar`; }, 1800);
+}
+
+function copiarFlete() {
+  if (!rawFlete) return;
+  navigator.clipboard.writeText(String(rawFlete));
+  const btn = document.getElementById('btnFlete');
+  btn.classList.add('copied'); btn.textContent = '✓ Copiado';
+  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/></svg>Copiar`; }, 1800);
+}
+
+function copiarLista() {
+  const filas = [];
+  const rows  = document.querySelectorAll('.city-row');
+  let hayDatos = false;
+  rows.forEach(row => {
+    const city = row.querySelector('.city-input')?.value.trim() || '';
+    const valRaw = row.querySelector('.value-input')?.value.replace(/[^\d]/g,'') || '';
+    const val  = valRaw ? '$ ' + new Intl.NumberFormat('es-CO').format(parseInt(valRaw,10)) : '';
+    if (city || val) { hayDatos = true; filas.push(city && val ? `${city}: ${val}` : city || val); }
+  });
+  if (!hayDatos) return;
+  const man = document.getElementById('inputManifiesto').value.trim();
+  const pla = document.getElementById('inputPlaca').value.trim();
+  let txt = '';
+  if (man) txt += `Manifiesto: ${man}\n`;
+  if (pla) txt += `Placa: ${pla}\n`;
+  if (txt) txt += '\n';
+  txt += filas.join('\n');
+  const total = getTotal();
+  if (total) txt += `\n\nTotal: $ ${fmtInt(total)}`;
+  navigator.clipboard.writeText(txt);
+  const btn = document.getElementById('btnCopyList');
+  btn.classList.add('copied'); btn.textContent = '✓ Lista copiada';
+  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg class="copy-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/></svg>Copiar lista de ciudades`; }, 2000);
+}
+
+function copiarManualVC() {
+  if (!rawManualVC) return;
+  navigator.clipboard.writeText(String(rawManualVC));
+  const btn = document.getElementById('btnManualVC');
+  btn.classList.add('copied');
+  setTimeout(() => btn.classList.remove('copied'), 1800);
+}
+
 function onManualInput(el) {
   const prev = el.value, pos = el.selectionStart;
   const digits = prev.replace(/[^\d]/g, '');
   if (!digits) {
     el.value = '';
     document.getElementById('manualResult').style.display = 'none';
-    return;
+    document.getElementById('btnManualVC').style.display = 'none';
+    rawManualVC = 0; return;
   }
   const formatted = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(parseInt(digits, 10));
   el.value = formatted;
   const diff = formatted.length - prev.length;
   el.setSelectionRange(pos + diff, pos + diff);
-
-  const flete = parseInt(digits, 10);
-  const imp   = Math.round(flete * IMP_PCT);
-  const vc    = flete - imp;
-  const obj   = rawObjetivo;
-
+  const f   = parseInt(digits, 10);
+  const imp = Math.round(f * IMP_PCT);
+  const vc  = f - imp;
   rawManualVC = vc;
-
   document.getElementById('mImp').textContent = '$ ' + fmtInt(imp);
   document.getElementById('mVC').textContent  = '$ ' + fmtInt(vc);
-  document.getElementById('mObj').textContent = obj ? '$ ' + fmtInt(obj) : '(calcula primero arriba)';
-
-  if (obj) {
-    const ok = vc === obj;
-    const cerrado = vc > obj;
-    document.getElementById('mOK').textContent  = ok ? '✓ Exacto' : (cerrado ? '✓ Cerrado (+$' + fmtInt(vc - obj) + ')' : '✗ Faltante ($' + fmtInt(obj - vc) + ')');
-    document.getElementById('mOK').className    = 'manual-result-value ' + (vc >= obj ? 'manual-badge-ok' : 'manual-badge-err');
-  } else {
-    document.getElementById('mOK').textContent = '—';
-    document.getElementById('mOK').className   = 'manual-result-value';
-  }
-
-  document.getElementById('btnManualVC').style.display = vc > 0 ? 'inline-flex' : 'none';
+  document.getElementById('mObj').textContent = rawObjetivo ? '$ ' + fmtInt(rawObjetivo) : '(sin calcular)';
+  const ok = rawObjetivo && vc === rawObjetivo;
+  const mOK = document.getElementById('mOK');
+  mOK.textContent = ok ? '✓ Sí, cierra exacto' : (rawObjetivo ? '✗ No cierra' : '—');
+  mOK.className   = 'manual-result-value ' + (ok ? 'manual-badge-ok' : (rawObjetivo ? 'manual-badge-err' : ''));
   document.getElementById('manualResult').style.display = 'block';
+  document.getElementById('btnManualVC').style.display  = 'inline-flex';
 }
-
-function copiarManualVC() {
-  const el = document.getElementById('manualFlete');
-  const digits = el.value.replace(/[^\d]/g, '');
-  if (!digits) return;
-  copiar(digits, 'btnManualVC');
-}
-
-function copiarLista() {
-  const manifiesto = document.getElementById('inputManifiesto').value.trim().toUpperCase();
-  const placa = document.getElementById('inputPlaca').value.trim().toUpperCase();
-  const rows = document.querySelectorAll('.city-row');
-  const lines = [];
-  if (manifiesto || placa) {
-    let header = 'REEXPEDICIONES';
-    if (manifiesto) header += ' DE MANIFIESTO ' + manifiesto;
-    if (placa) header += ' DEL VEHICULO ' + placa;
-    lines.push(header);
-  }
-  rows.forEach(row => {
-    const id = row.id.replace('row-', '');
-    const city = (document.getElementById('city-' + id) || {}).value || '';
-    const valEl = document.getElementById('val-' + id);
-    const digits = valEl ? valEl.value.replace(/[^\d]/g, '') : '';
-    if (city.trim() || digits) {
-      const valFmt = digits ? new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(parseInt(digits, 10)) : '0';
-      lines.push((city.trim() || '(sin nombre)').toUpperCase() + ' $' + valFmt);
-    }
-  });
-  if (!lines.length) return;
-  navigator.clipboard.writeText(lines.join('\n')).then(() => {
-    const btn = document.getElementById('btnCopyList');
-    const prev = btn.innerHTML;
-    btn.classList.add('copied');
-    btn.innerHTML = '<svg class="copy-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l3 3 7-7"/></svg> Copiado';
-    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = prev; }, 1800);
-  });
-}
-
-function copiar(texto, btnId) {
-  navigator.clipboard.writeText(texto).then(() => {
-    const btn = document.getElementById(btnId);
-    const prev = btn.innerHTML;
-    btn.classList.add('copied');
-    btn.innerHTML = '<svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l3 3 7-7"/></svg> Copiado';
-    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = prev; }, 1800);
-  });
-}
-
-function copiarObjetivo() { if (rawObjetivo) copiar(String(rawObjetivo), 'btnObjetivo'); }
-function copiarFlete()    { if (rawFlete)    copiar(String(rawFlete),    'btnFlete');    }
-
-addRow();
 </script>
 </body>
 </html>
