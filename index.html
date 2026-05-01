@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Sora', sans-serif; background: #0b0f1e; min-height: 100vh; display: flex; justify-content: center; padding: 2rem 1rem 5rem; color: #fff; }
+  body { font-family: 'Sora', sans-serif; background: #0b0f1e; min-height: 100vh; display: flex; justify-content: center; padding: 2rem 1rem; color: #fff; }
   .card { background: #12172e; border-radius: 18px; padding: 2rem 1.75rem; width: 100%; max-width: 480px; height: fit-content; }
   .app-title { font-size: 22px; font-weight: 700; color: #fff; text-align: center; margin-bottom: 1.75rem; letter-spacing: 0.01em; }
   .field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; margin-bottom: 12px; }
@@ -88,114 +88,69 @@
   .copy-btn-green:hover { background: #1a3a24; }
   .copy-icon { width: 12px; height: 12px; flex-shrink: 0; }
 
-  /* ── Botón scroll-to-bottom ─────────────────────────── */
-  #scrollDownBtn {
+  /* ── Botón scroll al final ─────────────────────────────────────────── */
+  #btnScrollBottom {
     position: fixed;
     bottom: 28px;
-    right: 28px;
+    right: 24px;
     z-index: 999;
-    display: none;
-    flex-direction: column;
+    display: none;          /* oculto por defecto */
     align-items: center;
-    gap: 0;
-    cursor: pointer;
-    background: none;
+    gap: 7px;
+    padding: 11px 18px;
+    border-radius: 50px;
     border: none;
-    padding: 0;
-  }
-
-  /* Etiqueta de alerta */
-  #scrollDownBtn .scroll-label {
-    background: #ffcc00;
-    color: #0b0f1e;
+    background: linear-gradient(135deg, #7a50c0, #4caf82);
+    color: #fff;
     font-family: 'Sora', sans-serif;
-    font-size: 11px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(76,175,130,0.35);
+    transition: opacity 0.25s, transform 0.25s;
+    animation: pulse-ring 1.8s ease-out infinite;
+  }
+  #btnScrollBottom:hover { transform: scale(1.06); }
+
+  /* Anillo pulsante de alerta */
+  @keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(76,255,154,0.55), 0 4px 20px rgba(76,175,130,0.35); }
+    70%  { box-shadow: 0 0 0 12px rgba(76,255,154,0),  0 4px 20px rgba(76,175,130,0.35); }
+    100% { box-shadow: 0 0 0 0 rgba(76,255,154,0),     0 4px 20px rgba(76,175,130,0.35); }
+  }
+
+  /* Etiqueta de alerta pequeña sobre el botón */
+  #btnScrollBottom .alert-tag {
+    position: absolute;
+    top: -9px;
+    right: -6px;
+    background: #ff4d6d;
+    color: #fff;
+    font-size: 9px;
     font-weight: 700;
-    letter-spacing: 0.05em;
-    padding: 5px 10px;
-    border-radius: 8px 8px 0 0;
+    letter-spacing: 0.06em;
+    padding: 2px 6px;
+    border-radius: 20px;
     white-space: nowrap;
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 0.3s, transform 0.3s;
-    pointer-events: none;
-    box-shadow: 0 -2px 10px rgba(255,204,0,0.3);
+    animation: badge-pop 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
   }
-
-  /* Círculo con flecha */
-  #scrollDownBtn .scroll-circle {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: #1e2540;
-    border: 2px solid #2d3558;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.25s cubic-bezier(.34,1.56,.64,1);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  @keyframes badge-pop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
   }
-
-  #scrollDownBtn .scroll-circle svg {
-    transition: transform 0.25s;
-  }
-
-  /* Estado pulse / alerta activa */
-  #scrollDownBtn.alert-active .scroll-label {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  #scrollDownBtn.alert-active .scroll-circle {
-    background: #ffcc00;
-    border-color: #ffcc00;
-    box-shadow: 0 0 0 0 rgba(255,204,0,0.5);
-    animation: pulseGlow 1.4s ease-in-out infinite;
-  }
-
-  #scrollDownBtn.alert-active .scroll-circle svg path,
-  #scrollDownBtn.alert-active .scroll-circle svg polyline {
-    stroke: #0b0f1e;
-  }
-
-  /* Hover */
-  #scrollDownBtn:hover .scroll-circle {
-    transform: scale(1.1);
-    border-color: #4a5580;
-  }
-
-  #scrollDownBtn.alert-active:hover .scroll-circle {
-    background: #ffe44d;
-    border-color: #ffe44d;
-    animation: none;
-    transform: scale(1.1);
-    box-shadow: 0 6px 28px rgba(255,204,0,0.45);
-  }
-
-  /* Animación de pulso */
-  @keyframes pulseGlow {
-    0%   { box-shadow: 0 0 0 0 rgba(255,204,0,0.55); }
-    50%  { box-shadow: 0 0 0 10px rgba(255,204,0,0); }
-    100% { box-shadow: 0 0 0 0 rgba(255,204,0,0); }
-  }
-
-  /* Bounce de entrada del botón */
-  @keyframes btnEntrada {
-    0%   { opacity: 0; transform: scale(0.5) translateY(20px); }
-    70%  { transform: scale(1.12) translateY(-4px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  #scrollDownBtn.show {
-    display: flex;
-    animation: btnEntrada 0.4s cubic-bezier(.34,1.56,.64,1) forwards;
-  }
-
-  /* Sentinel invisible al fondo de resultados */
-  #bottomSentinel { height: 1px; }
 </style>
 </head>
 <body>
+
+<!-- Botón flotante ir al final -->
+<button id="btnScrollBottom" onclick="scrollAlFinal()">
+  <span class="alert-tag">¡Ver resultado!</span>
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="7" y1="1" x2="7" y2="13"/><polyline points="3,9 7,13 11,9"/>
+  </svg>
+  Ir al resultado
+</button>
+
 <div class="card">
   <div class="app-title">Calculadora Chuky</div>
 
@@ -222,7 +177,7 @@
 
   <button class="copy-list-btn" id="btnCopyList" onclick="copiarLista()">
     <svg class="copy-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-      <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 00-1 1v7a1 1 0 001 1h2"/>
+      <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
     </svg>
     Copiar lista de ciudades
   </button>
@@ -303,11 +258,16 @@
         <span class="detail-value verif-ok" id="vVerif">—</span>
       </div>
       <div class="detail-row">
+        <span class="detail-label">Diferencia con el objetivo</span>
+        <span class="detail-value" id="vDiff">—</span>
+      </div>
+      <div class="detail-row">
         <span class="detail-label">¿Coincide con el objetivo?</span>
         <span class="detail-value verif-ok" id="vCoincide">—</span>
       </div>
     </div>
 
+    <!-- Probador manual de flete -->
     <div class="manual-block">
       <div class="manual-title">🔬 Probador manual de flete</div>
       <div class="manual-row">
@@ -342,69 +302,53 @@
       </div>
     </div>
 
-    <div id="bottomSentinel"></div>
-  </div><!-- /results -->
-</div><!-- /card -->
+    <!-- Ancla del final de la página -->
+    <div id="pageBottom"></div>
 
-<!-- Botón flotante scroll-to-bottom -->
-<button id="scrollDownBtn" onclick="scrollToBottom()" aria-label="Ver resultados completos">
-  <div class="scroll-label">⚡ Hay resultados abajo</div>
-  <div class="scroll-circle">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="6 9 12 15 18 9"/>
-    </svg>
-  </div>
-</button>
+  </div><!-- /results -->
+</div>
 
 <script>
 let rawObjetivo = 0, rawFlete = 0, rowCount = 0, rawManualVC = 0;
 const IMP_PCT = 0.01514;
 
-function fmt(n)    { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n); }
+function fmt(n) { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n); }
 function fmtInt(n) { return new Intl.NumberFormat('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n); }
 function ceil1000(n) { return Math.ceil(n / 1000) * 1000; }
 
-// ── Botón scroll ──────────────────────────────────────────────────────────────
-const scrollBtn = document.getElementById('scrollDownBtn');
-let alertTimeout = null;
-let observerActive = false;
+/* ── Botón scroll al final ──────────────────────────────────────── */
+const btnScroll = document.getElementById('btnScrollBottom');
 
-function showScrollBtn(withAlert) {
-  scrollBtn.classList.add('show');
-  if (withAlert) {
-    scrollBtn.classList.add('alert-active');
-    clearTimeout(alertTimeout);
-    // La alerta se apaga sola si el usuario ya llegó al fondo o tras 6s
-    alertTimeout = setTimeout(() => {
-      scrollBtn.classList.remove('alert-active');
-    }, 6000);
+function estaAlFinal() {
+  return (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 10;
+}
+
+function actualizarBtnScroll() {
+  if (btnScroll.style.display === 'none' || btnScroll.style.display === '') return;
+  if (estaAlFinal()) {
+    btnScroll.style.opacity = '0';
+    btnScroll.style.pointerEvents = 'none';
+    setTimeout(() => { btnScroll.style.display = 'none'; }, 260);
+  } else {
+    btnScroll.style.opacity = '1';
+    btnScroll.style.pointerEvents = 'auto';
   }
 }
 
-function hideScrollBtn() {
-  scrollBtn.classList.remove('alert-active');
-  clearTimeout(alertTimeout);
+function mostrarBtnScroll() {
+  if (estaAlFinal()) return;          // ya está abajo, no lo muestres
+  btnScroll.style.display = 'flex';
+  btnScroll.style.opacity = '1';
+  btnScroll.style.pointerEvents = 'auto';
 }
 
-function scrollToBottom() {
-  document.getElementById('bottomSentinel').scrollIntoView({ behavior: 'smooth', block: 'end' });
-  hideScrollBtn();
+function scrollAlFinal() {
+  document.getElementById('pageBottom').scrollIntoView({ behavior: 'smooth' });
 }
 
-// IntersectionObserver: si el sentinel ya es visible, silencia la alerta
-function setupObserver() {
-  if (observerActive) return;
-  observerActive = true;
-  const sentinel = document.getElementById('bottomSentinel');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) hideScrollBtn();
-    });
-  }, { threshold: 0.5 });
-  observer.observe(sentinel);
-}
+window.addEventListener('scroll', actualizarBtnScroll, { passive: true });
 
-// ── Filas de ciudad ───────────────────────────────────────────────────────────
+/* ── Filas de ciudades ──────────────────────────────────────────── */
 function addRow() {
   rowCount++;
   const id = rowCount;
@@ -429,7 +373,7 @@ function removeRow(id) {
   recalcTotal();
 }
 
-function onValInput(el) {
+function onValInput(el, id) {
   const prev = el.value, pos = el.selectionStart;
   const digits = prev.replace(/[^\d]/g, '');
   if (!digits) { el.value = ''; recalcTotal(); return; }
@@ -479,142 +423,125 @@ function calcular(raw) {
   if (!raw || raw === 0) {
     res.style.display = 'none';
     hint.style.display = 'block';
-    scrollBtn.classList.remove('show', 'alert-active');
+    btnScroll.style.display = 'none';
     rawObjetivo = 0; rawFlete = 0;
     return;
   }
 
-  // Paso 1
-  const p1raw    = raw * 1.014;
+  const p1raw   = raw * 1.014;
   const objetivo = ceil1000(p1raw);
 
-  // Paso 2
   const { flete, exacto } = buscarFleteExacto(objetivo);
   const fleteExacto = objetivo / (1 - IMP_PCT);
-  const impuesto    = Math.round(flete * IMP_PCT);
+
+  const impuesto      = Math.round(flete * IMP_PCT);
   const valorCancelar = flete - impuesto;
-  const coincide    = valorCancelar === objetivo;
+  const coincide      = valorCancelar === objetivo;
 
   rawObjetivo = objetivo;
   rawFlete    = flete;
 
-  // Mostrar resultados
-  const wasHidden = res.style.display === 'none' || res.style.display === '';
-  res.style.display = 'block';
-  hint.style.display = 'none';
-
-  // Actualizar campos
-  document.getElementById('r0').textContent    = '$ ' + fmtInt(raw);
-  document.getElementById('r1raw').textContent = '$ ' + fmt(p1raw);
-  document.getElementById('r1').textContent    = '$ ' + fmtInt(objetivo);
+  document.getElementById('r0').textContent     = '$ ' + fmtInt(raw);
+  document.getElementById('r1raw').textContent  = '$ ' + fmt(p1raw);
+  document.getElementById('r1').textContent     = '$ ' + fmtInt(objetivo);
   document.getElementById('robjetivo').textContent = '$ ' + fmtInt(objetivo);
-  document.getElementById('r2imp').textContent = '$ ' + fmt(objetivo * IMP_PCT);
-  document.getElementById('r2raw').textContent = '$ ' + fmt(fleteExacto);
-  document.getElementById('r2').textContent    = '$ ' + fmtInt(flete);
+  document.getElementById('r2imp').textContent  = '$ ' + fmt(objetivo * IMP_PCT);
+  document.getElementById('r2raw').textContent  = '$ ' + fmt(fleteExacto);
+  document.getElementById('r2').textContent     = '$ ' + fmtInt(flete);
   document.getElementById('rflete').textContent = '$ ' + fmtInt(flete);
   document.getElementById('rflete-sub').textContent = exacto
     ? 'Valor Cancelar resultante será exactamente el objetivo'
-    : 'Aproximación: Valor Cancelar ≥ objetivo (diferencia mínima)';
+    : 'Valor Cancelar resultante será el más cercano posible al objetivo';
+  const diff = valorCancelar - objetivo;
+  document.getElementById('vVerif').textContent    = '$ ' + fmtInt(valorCancelar);
+  document.getElementById('vDiff').textContent     = diff === 0 ? '$ 0' : (diff > 0 ? '+' : '') + '$ ' + fmtInt(diff);
+  document.getElementById('vDiff').className       = 'detail-value ' + (diff === 0 ? 'verif-ok' : 'verif-err');
+  document.getElementById('vCoincide').textContent = coincide ? '✓ Sí' : '✗ No (revisar)';
+  document.getElementById('vVerif').className    = 'detail-value ' + (coincide ? 'verif-ok' : 'verif-err');
+  document.getElementById('vCoincide').className = 'detail-value ' + (coincide ? 'verif-ok' : 'verif-err');
 
-  const vVerifEl   = document.getElementById('vVerif');
-  const vCoincideEl = document.getElementById('vCoincide');
-  vVerifEl.textContent   = '$ ' + fmtInt(valorCancelar);
-  vVerifEl.className     = 'detail-value ' + (coincide ? 'verif-ok' : 'verif-err');
-  vCoincideEl.textContent = coincide ? '✓ Sí, perfecto' : '✗ No coincide';
-  vCoincideEl.className   = 'detail-value ' + (coincide ? 'verif-ok' : 'verif-err');
+  res.style.display  = 'block';
+  hint.style.display = 'none';
 
-  // Verificar si el sentinel es visible antes de disparar la alerta
-  const sentinel = document.getElementById('bottomSentinel');
-  const rect = sentinel.getBoundingClientRect();
-  const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
-
-  if (!isVisible) {
-    showScrollBtn(true);   // botón + alerta
-  } else {
-    showScrollBtn(false);  // botón sin alerta (ya se ve el fondo)
-  }
-
-  setupObserver();
+  // Mostrar el botón flotante si hay resultados y no estamos ya al final
+  mostrarBtnScroll();
 }
 
-// ── Copiar ────────────────────────────────────────────────────────────────────
-function copiarObjetivo() {
-  if (!rawObjetivo) return;
-  navigator.clipboard.writeText(String(rawObjetivo));
-  const btn = document.getElementById('btnObjetivo');
-  btn.classList.add('copied'); btn.textContent = '✓ Copiado';
-  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 00-1 1v7a1 1 0 001 1h2"/></svg>Copiar`; }, 1800);
-}
-
-function copiarFlete() {
-  if (!rawFlete) return;
-  navigator.clipboard.writeText(String(rawFlete));
-  const btn = document.getElementById('btnFlete');
-  btn.classList.add('copied'); btn.textContent = '✓ Copiado';
-  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/></svg>Copiar`; }, 1800);
-}
-
-function copiarLista() {
-  const filas = [];
-  const rows  = document.querySelectorAll('.city-row');
-  let hayDatos = false;
-  rows.forEach(row => {
-    const city = row.querySelector('.city-input')?.value.trim() || '';
-    const valRaw = row.querySelector('.value-input')?.value.replace(/[^\d]/g,'') || '';
-    const val  = valRaw ? '$ ' + new Intl.NumberFormat('es-CO').format(parseInt(valRaw,10)) : '';
-    if (city || val) { hayDatos = true; filas.push(city && val ? `${city}: ${val}` : city || val); }
-  });
-  if (!hayDatos) return;
-  const man = document.getElementById('inputManifiesto').value.trim();
-  const pla = document.getElementById('inputPlaca').value.trim();
-  let txt = '';
-  if (man) txt += `Manifiesto: ${man}\n`;
-  if (pla) txt += `Placa: ${pla}\n`;
-  if (txt) txt += '\n';
-  txt += filas.join('\n');
-  const total = getTotal();
-  if (total) txt += `\n\nTotal: $ ${fmtInt(total)}`;
-  navigator.clipboard.writeText(txt);
-  const btn = document.getElementById('btnCopyList');
-  btn.classList.add('copied'); btn.textContent = '✓ Lista copiada';
-  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = `<svg class="copy-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/></svg>Copiar lista de ciudades`; }, 2000);
-}
-
-function copiarManualVC() {
-  if (!rawManualVC) return;
-  navigator.clipboard.writeText(String(rawManualVC));
-  const btn = document.getElementById('btnManualVC');
-  btn.classList.add('copied');
-  setTimeout(() => btn.classList.remove('copied'), 1800);
-}
-
+/* ── Probador manual ─────────────────────────────────────────────── */
 function onManualInput(el) {
   const prev = el.value, pos = el.selectionStart;
   const digits = prev.replace(/[^\d]/g, '');
+  const manualResult = document.getElementById('manualResult');
+  const btnVC = document.getElementById('btnManualVC');
+
   if (!digits) {
     el.value = '';
-    document.getElementById('manualResult').style.display = 'none';
-    document.getElementById('btnManualVC').style.display = 'none';
-    rawManualVC = 0; return;
+    manualResult.style.display = 'none';
+    btnVC.style.display = 'none';
+    rawManualVC = 0;
+    return;
   }
   const formatted = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(parseInt(digits, 10));
   el.value = formatted;
   const diff = formatted.length - prev.length;
   el.setSelectionRange(pos + diff, pos + diff);
+
   const f   = parseInt(digits, 10);
   const imp = Math.round(f * IMP_PCT);
   const vc  = f - imp;
   rawManualVC = vc;
+  const ok  = rawObjetivo > 0 && vc === rawObjetivo;
+
   document.getElementById('mImp').textContent = '$ ' + fmtInt(imp);
   document.getElementById('mVC').textContent  = '$ ' + fmtInt(vc);
-  document.getElementById('mObj').textContent = rawObjetivo ? '$ ' + fmtInt(rawObjetivo) : '(sin calcular)';
-  const ok = rawObjetivo && vc === rawObjetivo;
-  const mOK = document.getElementById('mOK');
-  mOK.textContent = ok ? '✓ Sí, cierra exacto' : (rawObjetivo ? '✗ No cierra' : '—');
-  mOK.className   = 'manual-result-value ' + (ok ? 'manual-badge-ok' : (rawObjetivo ? 'manual-badge-err' : ''));
-  document.getElementById('manualResult').style.display = 'block';
-  document.getElementById('btnManualVC').style.display  = 'inline-flex';
+  document.getElementById('mObj').textContent = rawObjetivo > 0 ? '$ ' + fmtInt(rawObjetivo) : '(sin objetivo)';
+  document.getElementById('mOK').textContent  = ok ? '✓ Sí' : '✗ No';
+  document.getElementById('mOK').className    = 'manual-result-value ' + (ok ? 'manual-badge-ok' : 'manual-badge-err');
+
+  manualResult.style.display = 'block';
+  btnVC.style.display = 'inline-flex';
+
+  // Mostrar botón scroll si aún no estamos al final
+  mostrarBtnScroll();
 }
+
+/* ── Copy helpers ─────────────────────────────────────────────────── */
+function flashCopied(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  const orig = btn.innerHTML;
+  btn.classList.add('copied');
+  btn.innerHTML = '✓ Copiado';
+  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+}
+
+function copiarLista() {
+  const rows = [];
+  document.querySelectorAll('.city-row').forEach(row => {
+    const city = row.querySelector('.city-input')?.value.trim();
+    const val  = row.querySelector('.value-input')?.value.trim();
+    if (city || val) rows.push((city || '—') + ': $' + (val || '0'));
+  });
+  navigator.clipboard.writeText(rows.join('\n')).then(() => flashCopied('btnCopyList'));
+}
+
+function copiarObjetivo() {
+  if (!rawObjetivo) return;
+  navigator.clipboard.writeText(String(rawObjetivo)).then(() => flashCopied('btnObjetivo'));
+}
+
+function copiarFlete() {
+  if (!rawFlete) return;
+  navigator.clipboard.writeText(String(rawFlete)).then(() => flashCopied('btnFlete'));
+}
+
+function copiarManualVC() {
+  if (!rawManualVC) return;
+  navigator.clipboard.writeText(String(rawManualVC)).then(() => flashCopied('btnManualVC'));
+}
+
+// Inicializar con una fila
+addRow();
 </script>
 </body>
 </html>
