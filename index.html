@@ -107,7 +107,7 @@
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 20px rgba(76,175,130,0.35);
-    transition: opacity 0.25s, transform 0.25s;
+    transition: opacity 0.25s, transform 0.25s, bottom 0.15s;
     animation: pulse-ring 1.8s ease-out infinite;
   }
   #btnScrollBottom:hover { transform: scale(1.06); }
@@ -320,23 +320,51 @@ function ceil1000(n) { return Math.ceil(n / 1000) * 1000; }
 const btnScroll = document.getElementById('btnScrollBottom');
 
 function estaAlFinal() {
-  return (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 10;
+  // Usa visualViewport si está disponible (más preciso en móvil con teclado abierto)
+  const viewH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const scrolled = window.scrollY + viewH;
+  return scrolled >= document.body.scrollHeight - 16;
+}
+
+function hayResultados() {
+  return rawObjetivo > 0;
+}
+
+function actualizarPosicionBtn() {
+  if (!window.visualViewport) return;
+  const vv = window.visualViewport;
+  // Distancia desde la parte inferior del viewport visual hasta el borde de la pantalla
+  const offsetAboveKeyboard = window.innerHeight - (vv.offsetTop + vv.height);
+  btnScroll.style.bottom = (offsetAboveKeyboard + 16) + 'px';
 }
 
 function actualizarBtnScroll() {
-  if (btnScroll.style.display === 'none' || btnScroll.style.display === '') return;
-  if (estaAlFinal()) {
+  actualizarPosicionBtn();
+
+  if (!hayResultados()) {
+    // Sin resultados: siempre oculto
     btnScroll.style.opacity = '0';
     btnScroll.style.pointerEvents = 'none';
-    setTimeout(() => { btnScroll.style.display = 'none'; }, 260);
+    setTimeout(() => { if (!hayResultados()) btnScroll.style.display = 'none'; }, 260);
+    return;
+  }
+
+  if (estaAlFinal()) {
+    // Al final: ocultar
+    btnScroll.style.opacity = '0';
+    btnScroll.style.pointerEvents = 'none';
+    setTimeout(() => { if (estaAlFinal()) btnScroll.style.display = 'none'; }, 260);
   } else {
+    // No al final y hay resultados: mostrar
+    btnScroll.style.display = 'flex';
     btnScroll.style.opacity = '1';
     btnScroll.style.pointerEvents = 'auto';
   }
 }
 
 function mostrarBtnScroll() {
-  if (estaAlFinal()) return;          // ya está abajo, no lo muestres
+  if (estaAlFinal()) return;
+  actualizarPosicionBtn();
   btnScroll.style.display = 'flex';
   btnScroll.style.opacity = '1';
   btnScroll.style.pointerEvents = 'auto';
@@ -347,6 +375,12 @@ function scrollAlFinal() {
 }
 
 window.addEventListener('scroll', actualizarBtnScroll, { passive: true });
+
+// Escuchar cambios del viewport visual (teclado móvil abre/cierra)
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', actualizarBtnScroll);
+  window.visualViewport.addEventListener('scroll', actualizarBtnScroll);
+}
 
 /* ── Filas de ciudades ──────────────────────────────────────────── */
 function addRow() {
