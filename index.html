@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculadora Chuky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #080c18;
+  --surface:  #0e1428;
+  --surface2: #141c38;
+  --border:   #1e2a50;
+  --border2:  #2a3860;
+  --text:     #e8eeff;
+  --muted:    #5a6a9a;
+  --accent:   #3d7fff;
+  --green:    #00e5a0;
+  --yellow:   #f5c542;
+  --red:      #ff4f6d;
+  --purple:   #a07aff;
+  --font:     'Sora', sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem 5rem;
+  color: var(--text);
+}
+
+.app { width: 100%; max-width: 500px; }
+
+/* ── Header ─────────────────────────────────────── */
+.app-header { text-align: center; margin-bottom: 2rem; padding-top: 0.5rem; }
+.app-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+.app-header .sub { font-size: 11px; color: var(--muted); margin-top: 4px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ── Sections ───────────────────────────────────── */
+.section {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem;
+}
+.section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+}
+
+/* ── Inputs ─────────────────────────────────────── */
+.row2 { display: flex; gap: 10px; }
+.field { flex: 1; min-width: 0; }
+.inp-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.inp {
+  width: 100%; font-family: var(--font); font-size: 14px;
+  padding: 10px 13px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 10px;
+  color: var(--text); outline: none; transition: border-color 0.15s;
+}
+.inp::placeholder { color: var(--muted); }
+.inp:focus { border-color: var(--accent); }
+
+/* ── City rows ──────────────────────────────────── */
+.city-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px; animation: fadeIn 0.18s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+
+.city-inp {
+  flex: 1.1; font-family: var(--font); font-size: 14px;
+  padding: 10px 12px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 10px;
+  color: var(--text); outline: none; min-width: 0; transition: border-color 0.15s;
+}
+.city-inp::placeholder { color: var(--muted); }
+.city-inp:focus { border-color: var(--accent); }
+
+.val-wrap {
+  display: flex; align-items: center; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 0 10px; flex: 1; min-width: 0; gap: 4px; transition: border-color 0.15s;
+}
+.val-wrap:focus-within { border-color: var(--accent); }
+.val-prefix { font-size: 13px; color: var(--muted); flex-shrink: 0; }
+.val-inp {
+  flex: 1; font-family: var(--font); font-size: 14px;
+  padding: 10px 0; border: none; outline: none;
+  color: var(--text); background: transparent; min-width: 0;
+}
+.val-inp::placeholder { color: var(--muted); }
+.unit { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+
+.rm-btn {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--muted); cursor: pointer; font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.12s;
+}
+.rm-btn:hover { background: #2d1522; color: var(--red); border-color: #5a2030; }
+
+/* ── Buttons ────────────────────────────────────── */
+.add-btn {
+  width: 100%; padding: 9px; border-radius: 10px;
+  border: 1px dashed var(--border2); background: transparent;
+  color: var(--muted); cursor: pointer; font-size: 13px;
+  font-family: var(--font); margin-top: 2px; margin-bottom: 1rem;
+  transition: all 0.12s; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.add-btn:hover { background: var(--surface2); border-color: var(--accent); color: var(--text); }
+
+.copy-list-btn {
+  width: 100%; padding: 9px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--muted); cursor: pointer; font-size: 13px;
+  font-family: var(--font); transition: all 0.12s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.copy-list-btn:hover { color: var(--text); }
+.copy-list-btn.copied { color: var(--green); border-color: #1a4a38; }
+
+.copy-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; padding: 5px 10px; border-radius: 7px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--muted); cursor: pointer; font-family: var(--font);
+  transition: all 0.12s; white-space: nowrap;
+}
+.copy-btn:hover { color: var(--text); }
+.copy-btn.copied { color: var(--green); border-color: #1a4a38; }
+.copy-btn-green { border-color: #1a4a30; background: #0a2018; color: #3a9060; }
+.copy-btn-green:hover { color: var(--green); }
+.copy-icon { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* ── Total bar ──────────────────────────────────── */
+.total-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 1rem;
+}
+.total-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.total-val { font-size: 18px; font-weight: 700; color: var(--text); }
+
+/* ── Hint / Results ─────────────────────────────── */
+.hint { font-size: 13px; color: var(--muted); text-align: center; padding: 0.5rem 0 0.25rem; }
+.results { display: none; }
+
+/* ── Detail card ────────────────────────────────── */
+.detail-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0 14px; margin-bottom: 1rem;
+}
+.detail-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 11px 0; border-bottom: 1px solid var(--border);
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-lbl { font-size: 13px; color: var(--muted); }
+.detail-val { font-size: 14px; font-weight: 600; color: var(--text); }
+.badge {
+  display: inline-block; font-size: 9px; padding: 2px 6px; border-radius: 5px;
+  background: #1a1a3a; color: var(--purple); margin-left: 6px;
+  vertical-align: middle; font-weight: 600; letter-spacing: 0.06em;
+}
+
+/* ── Objetivo card ──────────────────────────────── */
+.objetivo-card {
+  background: #0e1830; border: 1px solid #1a3060;
+  border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+}
+.objetivo-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.objetivo-card-title { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #5a90ff; }
+.objetivo-big { font-size: 40px; font-weight: 700; color: #80b0ff; letter-spacing: -1px; text-align: center; margin-bottom: 4px; }
+.objetivo-sub { font-size: 12px; color: #3a6090; text-align: center; }
+
+/* ── Flete card ─────────────────────────────────── */
+.flete-card {
+  background: linear-gradient(135deg, #0a2a18 0%, #0e1f30 100%);
+  border: 1px solid #1a4a30; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+}
+.flete-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.flete-card-title { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); }
+.flete-big { font-size: 40px; font-weight: 700; color: #4cffa0; letter-spacing: -1px; text-align: center; margin-bottom: 4px; }
+.flete-sub { font-size: 12px; color: #3a9060; text-align: center; }
+
+/* ── Probador ───────────────────────────────────── */
+.probador {
+  background: #0e0e24; border: 1px solid #2a2060;
+  border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem;
+}
+.probador-title {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--purple); margin-bottom: 14px;
+}
+.prob-fields { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.prob-field-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #5a4a90; margin-bottom: 5px;
+}
+.prob-wrap {
+  display: flex; align-items: center; background: var(--bg);
+  border: 1px solid #2a2060; border-radius: 10px;
+  padding: 0 10px; gap: 6px; transition: border-color 0.15s;
+}
+.prob-wrap:focus-within { border-color: var(--purple); }
+.prob-inp {
+  flex: 1; font-family: var(--font); font-size: 15px; font-weight: 600;
+  padding: 10px 0; border: none; outline: none;
+  color: var(--text); background: transparent; min-width: 0;
+}
+.prob-inp::placeholder { color: #3a2a70; font-weight: 400; font-size: 13px; }
+
+.prob-result {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px; display: none;
+}
+.prob-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid #1a1a30;
+}
+.prob-row:last-child { border-bottom: none; }
+.prob-lbl { font-size: 12px; color: var(--muted); }
+.prob-val { font-size: 13px; font-weight: 600; color: var(--text); }
+.ok   { color: var(--green)  !important; }
+.err  { color: var(--red)    !important; }
+.warn { color: var(--yellow) !important; }
+
+.prob-verdict {
+  margin-top: 10px; border-radius: 10px; padding: 12px 14px;
+  display: none; align-items: center; gap: 10px;
+  font-size: 13px; font-weight: 600;
+}
+.prob-verdict.ok-bg   { background: #0a2a18; border: 1px solid #1a5030; color: var(--green); }
+.prob-verdict.err-bg  { background: #2a0a14; border: 1px solid #5a1a28; color: var(--red); }
+.prob-verdict.warn-bg { background: #2a2000; border: 1px solid #5a4500; color: var(--yellow); }
+.verdict-icon { font-size: 18px; flex-shrink: 0; }
+.verdict-text { flex: 1; line-height: 1.4; }
+.verdict-diff { font-size: 11px; font-weight: 400; opacity: 0.85; margin-top: 3px; }
+
+/* ── Controles del campo flete a probar ─────────── */
+.prob-controls {
+  display: flex; flex-direction: column; gap: 2px; flex-shrink: 0;
+}
+.prob-arrow {
+  width: 26px; height: 22px; border-radius: 6px;
+  border: 1px solid #2a2060; background: #1a1440;
+  color: var(--purple); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s; font-size: 10px; line-height: 1;
+}
+.prob-arrow:hover { background: #2a2060; color: #fff; }
+.prob-arrow:active { transform: scale(0.92); }
+
+.prob-copy-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; padding: 5px 9px; border-radius: 7px;
+  border: 1px solid #2a2060; background: #1a1440;
+  color: var(--purple); cursor: pointer; font-family: var(--font);
+  transition: all 0.12s; white-space: nowrap; flex-shrink: 0;
+}
+.prob-copy-btn:hover { background: #2a2060; color: #fff; }
+.prob-copy-btn.copied { color: var(--green); border-color: #1a4a38; background: #0a2018; }
+
+/* ── Scroll button ──────────────────────────────── */
+#btnScroll {
+  position: fixed; bottom: 24px; right: 20px; z-index: 999;
+  display: none; align-items: center; gap: 6px;
+  padding: 10px 16px; border-radius: 50px; border: none;
+  background: linear-gradient(135deg, #7a5aff, #00e5a0);
+  color: #fff; font-family: var(--font); font-size: 13px; font-weight: 600;
+  cursor: pointer; box-shadow: 0 4px 24px rgba(0,229,160,0.3);
+  transition: opacity 0.2s, transform 0.2s; animation: pulse 2s ease-out infinite;
+}
+#btnScroll:hover { transform: scale(1.05); }
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0,229,160,0.5), 0 4px 24px rgba(0,229,160,0.3); }
+  70%  { box-shadow: 0 0 0 10px rgba(0,229,160,0), 0 4px 24px rgba(0,229,160,0.3); }
+  100% { box-shadow: 0 0 0 0 rgba(0,229,160,0),   0 4px 24px rgba(0,229,160,0.3); }
+}
+.alert-tag {
+  position: absolute; top: -8px; right: -4px;
+  background: var(--red); color: #fff; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.06em; padding: 2px 6px; border-radius: 20px; white-space: nowrap;
+}
+#pageBottom { height: 1px; }
+</style>
+</head>
+<body>
+
+<button id="btnScroll" onclick="scrollAlFinal()">
+  <span class="alert-tag">¡Ver resultado!</span>
+  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="7" y1="1" x2="7" y2="13"/><polyline points="3,9 7,13 11,9"/>
+  </svg>
+  Ver resultado
+</button>
+
+<div class="app">
+  <div class="app-header">
+    <h1>Calculadora Chuky</h1>
+    <div class="sub">Silogtran · Reexpediciones</div>
+  </div>
+
+  <!-- Manifiesto / Placa -->
+  <div class="section">
+    <div class="section-label">Información del manifiesto</div>
+    <div class="row2">
+      <div class="field">
+        <div class="inp-label">Manifiesto</div>
+        <input type="text" class="inp" id="inputManifiesto" placeholder="Ej: 0101159181" autocomplete="off" />
+      </div>
+      <div class="field">
+        <div class="inp-label">Placa</div>
+        <input type="text" class="inp" id="inputPlaca" placeholder="Ej: GET332" autocomplete="off" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Ciudades -->
+  <div class="section">
+    <div class="section-label">Ciudades y valores de reexpedición</div>
+    <div id="cityRows"></div>
+    <button class="add-btn" onclick="addRow()">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8">
+        <line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/>
+      </svg>
+      Agregar ciudad
+    </button>
+    <button class="copy-list-btn" id="btnCopyList" onclick="copiarLista()">
+      <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
+      </svg>
+      Copiar lista de ciudades
+    </button>
+  </div>
+
+  <!-- Total -->
+  <div class="total-bar">
+    <span class="total-lbl">Total reexpediciones</span>
+    <span class="total-val" id="totalDisplay">$ 0</span>
+  </div>
+
+  <p class="hint" id="hint">Ingresa valores para ver el cálculo</p>
+
+  <!-- Resultados -->
+  <div class="results" id="results">
+
+    <!-- Paso 1 desglose -->
+    <div class="detail-card">
+      <div class="detail-row">
+        <span class="detail-lbl">Total reexpediciones</span>
+        <span class="detail-val" id="rTotal">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-lbl">+ 1.4% <span class="badge">PASO 1</span></span>
+        <span class="detail-val" id="rMas14">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-lbl">Subtotal</span>
+        <span class="detail-val" id="rAntes">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-lbl">Redondeado al próximo múltiplo de 1.000</span>
+        <span class="detail-val" id="rObjetivoRaw">—</span>
+      </div>
+    </div>
+
+    <!-- Objetivo -->
+    <div class="objetivo-card">
+      <div class="objetivo-card-top">
+        <div class="objetivo-card-title">Valor Cancelar objetivo</div>
+        <button class="copy-btn" id="btnCopyObjetivo" onclick="copiarObjetivo()">
+          <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
+          </svg>
+          Copiar
+        </button>
+      </div>
+      <div class="objetivo-big" id="rObjetivo">—</div>
+      <div class="objetivo-sub">Lo que debe quedar en "Valor Cancelar" de Silogtran</div>
+    </div>
+
+    <!-- Paso 2 desglose -->
+    <div class="detail-card">
+      <div class="detail-row">
+        <span class="detail-lbl">Valor Cancelar objetivo</span>
+        <span class="detail-val" id="rObjetivo2">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-lbl">÷ (1 − 1.4343%) <span class="badge">PASO 2</span></span>
+        <span class="detail-val" id="rFleteRaw">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-lbl">Redondeado al entero siguiente</span>
+        <span class="detail-val" id="rFleteRedondeado">—</span>
+      </div>
+    </div>
+
+    <!-- Flete -->
+    <div class="flete-card">
+      <div class="flete-card-top">
+        <div class="flete-card-title">Flete a ingresar en Silogtran</div>
+        <button class="copy-btn copy-btn-green" id="btnCopyFlete" onclick="copiarFlete()">
+          <svg class="copy-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 001 1h2"/>
+          </svg>
+          Copiar
+        </button>
+      </div>
+      <div class="flete-big" id="rFlete">—</div>
+      <div class="flete-sub">Flete − Impuesto Silogtran debe dar el Valor Cancelar objetivo</div>
+    </div>
+
+    <!-- Probador manual -->
+    <div class="probador">
+      <div class="probador-title">🔬 Probador manual</div>
+      <div class="prob-fields">
+        <div>
+          <div class="prob-field-label">Flete a probar</div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <div class="prob-wrap" style="flex:1">
+              <span class="val-prefix">$</span>
+              <input type="text" class="prob-inp" id="probFlete" placeholder="Ej: 1.471.000" oninput="onProbInput()" autocomplete="new-password" name="pf-x" />
+              <span class="unit">COP</span>
+            </div>
+            <!-- Flechitas ▲▼ -->
+            <div class="prob-controls">
+              <button class="prob-arrow" onclick="ajustarFlete(1)" title="Sumar 1">▲</button>
+              <button class="prob-arrow" onclick="ajustarFlete(-1)" title="Restar 1">▼</button>
+            </div>
+            <!-- Copiar sin puntos -->
+            <button class="prob-copy-btn" id="btnCopyProbFlete" onclick="copiarProbFlete()">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3a1 1 0 00-1-1H3a1 1 0 001 1h2"/>
+              </svg>
+              Copiar
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="prob-field-label">Impuesto que muestra Silogtran</div>
+          <div class="prob-wrap">
+            <span class="val-prefix">$</span>
+            <input type="text" class="prob-inp" id="probImpuesto" placeholder="Ej: 21.000" oninput="onProbInput()" autocomplete="new-password" name="pi-x" />
+            <span class="unit">COP</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prob-result" id="probResult">
+        <div class="prob-row">
+          <span class="prob-lbl">Flete ingresado</span>
+          <span class="prob-val" id="pFlete">—</span>
+        </div>
+        <div class="prob-row">
+          <span class="prob-lbl">Impuesto Silogtran</span>
+          <span class="prob-val" id="pImp">—</span>
+        </div>
+        <div class="prob-row">
+          <span class="prob-lbl">Flete − Impuesto</span>
+          <span class="prob-val" id="pVC">—</span>
+        </div>
+        <div class="prob-row">
+          <span class="prob-lbl">Valor Cancelar objetivo</span>
+          <span class="prob-val" id="pObj">—</span>
+        </div>
+        <div class="prob-row">
+          <span class="prob-lbl">Diferencia</span>
+          <span class="prob-val" id="pDiff">—</span>
+        </div>
+      </div>
+
+      <div class="prob-verdict" id="probVerdict">
+        <span class="verdict-icon" id="vIcon"></span>
+        <div class="verdict-text">
+          <div id="vMsg"></div>
+          <div class="verdict-diff" id="vDiff"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="pageBottom"></div>
+  </div>
+</div>
+
+<script>
+// ── Constantes ───────────────────────────────────
+// PASO 1: total × 1.4% → redondear al próximo múltiplo de 1.000 = Valor Cancelar objetivo
+// PASO 2: objetivo ÷ (1 − 1.4343%) → ceil al entero siguiente = Flete a ingresar
+// PROBADOR: flete − impuesto_silogtran debe coincidir con el objetivo
+
+const PCT_BANCA = 0.014;     // 1.4%    — lo que descuenta la banca al conductor
+const PCT_SILO  = 0.014343;  // 1.4343% — porcentaje que cobra Silogtran
+
+let rawTotal = 0, rawObjetivo = 0, rawFlete = 0, rowCount = 0;
+
+const fmt    = n => new Intl.NumberFormat('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+const fmtInt = n => new Intl.NumberFormat('es-CO', { minimumFractionDigits: 0,  maximumFractionDigits: 0  }).format(n);
+const ceil1000 = n => Math.ceil(n / 1000) * 1000;
+
+// ── Scroll button ────────────────────────────────
+const btnScroll = document.getElementById('btnScroll');
+function estaAlFinal() {
+  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  return window.scrollY + h >= document.body.scrollHeight - 16;
+}
+function ajustarBtn() {
+  if (!window.visualViewport) return;
+  const vv = window.visualViewport;
+  btnScroll.style.bottom = (window.innerHeight - (vv.offsetTop + vv.height) + 16) + 'px';
+}
+function actualizarBtn() {
+  ajustarBtn();
+  if (!rawFlete || estaAlFinal()) {
+    btnScroll.style.opacity = '0'; btnScroll.style.pointerEvents = 'none';
+    setTimeout(() => { if (!rawFlete || estaAlFinal()) btnScroll.style.display = 'none'; }, 220);
+  } else {
+    btnScroll.style.display = 'flex'; btnScroll.style.opacity = '1'; btnScroll.style.pointerEvents = 'auto';
+  }
+}
+function mostrarBtn() {
+  if (!estaAlFinal() && rawFlete) {
+    ajustarBtn(); btnScroll.style.display = 'flex';
+    btnScroll.style.opacity = '1'; btnScroll.style.pointerEvents = 'auto';
+  }
+}
+function scrollAlFinal() { document.getElementById('pageBottom').scrollIntoView({ behavior: 'smooth' }); }
+window.addEventListener('scroll', actualizarBtn, { passive: true });
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', actualizarBtn);
+  window.visualViewport.addEventListener('scroll', actualizarBtn);
+}
+
+// ── City rows ────────────────────────────────────
+function addRow() {
+  rowCount++;
+  const id = rowCount;
+  const div = document.createElement('div');
+  div.className = 'city-row'; div.id = 'row-' + id;
+  div.innerHTML = `
+    <input type="text" class="city-inp" placeholder="Ciudad" id="city-${id}" autocomplete="off" />
+    <div class="val-wrap">
+      <span class="val-prefix">$</span>
+      <input type="text" class="val-inp" placeholder="0" id="val-${id}" oninput="onValInput(this)" autocomplete="off" />
+      <span class="unit">COP</span>
+    </div>
+    <button class="rm-btn" onclick="removeRow(${id})" title="Eliminar">×</button>
+  `;
+  document.getElementById('cityRows').appendChild(div);
+}
+
+function removeRow(id) {
+  const el = document.getElementById('row-' + id);
+  if (el) el.remove();
+  recalc();
+}
+
+function onValInput(el) {
+  const prev = el.value, pos = el.selectionStart;
+  const digits = prev.replace(/[^\d]/g, '');
+  if (!digits) { el.value = ''; recalc(); return; }
+  const f = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(parseInt(digits, 10));
+  el.value = f;
+  el.setSelectionRange(pos + f.length - prev.length, pos + f.length - prev.length);
+  recalc();
+}
+
+function getTotal() {
+  let s = 0;
+  document.querySelectorAll('.val-inp').forEach(inp => {
+    const d = inp.value.replace(/[^\d]/g, '');
+    if (d) s += parseInt(d, 10);
+  });
+  return s;
+}
+
+function recalc() {
+  const total = getTotal();
+  document.getElementById('totalDisplay').textContent = '$ ' + fmtInt(total);
+  calcular(total);
+}
+
+// ── Cálculo principal ────────────────────────────
+function calcular(total) {
+  const res  = document.getElementById('results');
+  const hint = document.getElementById('hint');
+
+  if (!total) {
+    res.style.display = 'none'; hint.style.display = 'block';
+    rawTotal = 0; rawObjetivo = 0; rawFlete = 0;
+    btnScroll.style.display = 'none';
+    return;
+  }
+
+  rawTotal = total;
+
+  // PASO 1: total + 1.4% → redondear al próximo múltiplo de 1.000
+  const mas14    = total * PCT_BANCA;
+  const antes    = total + mas14;          // = total * 1.014
+  const objetivo = ceil1000(antes);
+  rawObjetivo = objetivo;
+
+  // PASO 2: objetivo ÷ (1 - 1.4343%) → ceil al entero siguiente
+  const fleteExacto = objetivo / (1 - PCT_SILO);
+  const flete       = Math.ceil(fleteExacto);
+  rawFlete = flete;
+
+  // UI paso 1
+  document.getElementById('rTotal').textContent       = '$ ' + fmtInt(total);
+  document.getElementById('rMas14').textContent       = '+ $ ' + fmt(mas14);
+  document.getElementById('rAntes').textContent       = '$ ' + fmt(antes);
+  document.getElementById('rObjetivoRaw').textContent = '$ ' + fmtInt(objetivo);
+  document.getElementById('rObjetivo').textContent    = '$ ' + fmtInt(objetivo);
+
+  // UI paso 2
+  document.getElementById('rObjetivo2').textContent      = '$ ' + fmtInt(objetivo);
+  document.getElementById('rFleteRaw').textContent       = '$ ' + fmt(fleteExacto);
+  document.getElementById('rFleteRedondeado').textContent= '$ ' + fmtInt(flete);
+  document.getElementById('rFlete').textContent          = '$ ' + fmtInt(flete);
+
+  res.style.display  = 'block';
+  hint.style.display = 'none';
+  mostrarBtn();
+}
+
+// ── Probador manual ──────────────────────────────
+function parseFmt(el) {
+  const prev = el.value, pos = el.selectionStart;
+  const digits = prev.replace(/[^\d]/g, '');
+  if (!digits) { el.value = ''; return 0; }
+  const f = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(parseInt(digits, 10));
+  el.value = f;
+  el.setSelectionRange(pos + f.length - prev.length, pos + f.length - prev.length);
+  return parseInt(digits, 10);
+}
+
+function onProbInput() {
+  const flete = parseFmt(document.getElementById('probFlete'));
+  const imp   = parseFmt(document.getElementById('probImpuesto'));
+  const resultDiv  = document.getElementById('probResult');
+  const verdictDiv = document.getElementById('probVerdict');
+
+  if (!flete) {
+    resultDiv.style.display = 'none'; verdictDiv.style.display = 'none'; return;
+  }
+
+  const vc   = flete - imp;
+  const diff = rawObjetivo > 0 ? vc - rawObjetivo : null;
+  const exacto  = diff === 0;
+  const cercano = diff !== null && Math.abs(diff) <= 1000;
+
+  document.getElementById('pFlete').textContent = '$ ' + fmtInt(flete);
+  document.getElementById('pImp').textContent   = imp ? '$ ' + fmtInt(imp) : '—';
+  document.getElementById('pVC').textContent    = '$ ' + fmtInt(vc);
+  document.getElementById('pObj').textContent   = rawObjetivo > 0 ? '$ ' + fmtInt(rawObjetivo) : '(sin objetivo)';
+
+  if (diff !== null) {
+    document.getElementById('pDiff').textContent = diff === 0 ? '$ 0' : (diff > 0 ? '+' : '') + '$ ' + fmtInt(diff);
+    document.getElementById('pDiff').className   = 'prob-val ' + (exacto ? 'ok' : cercano ? 'warn' : 'err');
+  } else {
+    document.getElementById('pDiff').textContent = '—';
+    document.getElementById('pDiff').className   = 'prob-val';
+  }
+
+  resultDiv.style.display = 'block';
+
+  verdictDiv.className = 'prob-verdict';
+  if (diff === null) {
+    verdictDiv.style.display = 'none';
+  } else if (exacto) {
+    verdictDiv.classList.add('ok-bg'); verdictDiv.style.display = 'flex';
+    document.getElementById('vIcon').textContent = '✓';
+    document.getElementById('vMsg').textContent  = '¡Perfecto! Flete − Impuesto = Valor Cancelar objetivo exacto.';
+    document.getElementById('vDiff').textContent = '';
+  } else if (cercano) {
+    verdictDiv.classList.add('warn-bg'); verdictDiv.style.display = 'flex';
+    document.getElementById('vIcon').textContent = '⚠';
+    document.getElementById('vMsg').textContent  = 'Casi cierra — diferencia pequeña.';
+    document.getElementById('vDiff').textContent = 'Diferencia: ' + (diff > 0 ? '+' : '') + '$ ' + fmtInt(diff) + ' — ajusta el flete.';
+  } else {
+    verdictDiv.classList.add('err-bg'); verdictDiv.style.display = 'flex';
+    document.getElementById('vIcon').textContent = '✗';
+    document.getElementById('vMsg').textContent  = 'No cierra. El resultado no coincide con el objetivo.';
+    document.getElementById('vDiff').textContent = 'Diferencia: ' + (diff > 0 ? '+' : '') + '$ ' + fmtInt(diff);
+  }
+
+  mostrarBtn();
+}
+
+// ── Ajustar flete con flechitas ──────────────────
+function ajustarFlete(delta) {
+  const el = document.getElementById('probFlete');
+  const digits = el.value.replace(/[^\d]/g, '');
+  const actual = digits ? parseInt(digits, 10) : 0;
+  const nuevo  = Math.max(0, actual + delta);
+  const f = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(nuevo);
+  el.value = f;
+  onProbInput();
+}
+
+function copiarProbFlete() {
+  const el = document.getElementById('probFlete');
+  const digits = el.value.replace(/[^\d]/g, '');
+  if (!digits) return;
+  navigator.clipboard.writeText(digits).then(() => flash('btnCopyProbFlete'));
+}
+
+function flash(id) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  const orig = btn.innerHTML;
+  btn.classList.add('copied');
+  btn.innerHTML = '✓ Copiado';
+  setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+}
+function copiarLista() {
+  const rows = [];
+  document.querySelectorAll('.city-row').forEach(row => {
+    const city = row.querySelector('.city-inp')?.value.trim();
+    const val  = row.querySelector('.val-inp')?.value.trim();
+    if (city || val) rows.push((city || '—') + ': $' + (val || '0'));
+  });
+  navigator.clipboard.writeText(rows.join('\n')).then(() => flash('btnCopyList'));
+}
+function copiarObjetivo() {
+  if (!rawObjetivo) return;
+  navigator.clipboard.writeText(String(rawObjetivo)).then(() => flash('btnCopyObjetivo'));
+}
+function copiarFlete() {
+  if (!rawFlete) return;
+  navigator.clipboard.writeText(String(rawFlete)).then(() => flash('btnCopyFlete'));
+}
+
+// Init
+addRow();
+</script>
+</body>
+</html>
