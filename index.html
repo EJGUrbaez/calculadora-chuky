@@ -721,13 +721,26 @@ function flash(id) {
   setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
 }
 function copiarLista() {
+  const manifiesto = document.getElementById('inputManifiesto').value.replace(/\D/g, '');
+  const placaRaw   = document.getElementById('inputPlaca').value.trim();
+
+  // Formatear placa: 3 letras + 3 números (ej: GET332)
+  const letras  = placaRaw.replace(/[^a-zA-Z]/g, '').slice(0, 3);
+  const numeros = placaRaw.replace(/\D/g, '').slice(0, 3);
+  const placa   = (letras + numeros) || placaRaw;
+
+  const header = 'REEXPEDICIONES DE MANIFIESTO ' + (manifiesto || '—') +
+                 ' DE VEHICULO ' + placa.toUpperCase();
+
   const rows = [];
   document.querySelectorAll('.city-row').forEach(row => {
     const city = row.querySelector('.city-inp')?.value.trim();
     const val  = row.querySelector('.val-inp')?.value.trim();
-    if (city || val) rows.push((city || '—') + ': $' + (val || '0'));
+    if (city || val) rows.push(((city || '—') + ': $' + (val || '0')).toUpperCase());
   });
-  navigator.clipboard.writeText(rows.join('\n')).then(() => flash('btnCopyList'));
+
+  const texto = (header + '\n' + rows.join('\n')).toUpperCase();
+  navigator.clipboard.writeText(texto).then(() => flash('btnCopyList'));
 }
 function copiarObjetivo() {
   if (!rawObjetivo) return;
