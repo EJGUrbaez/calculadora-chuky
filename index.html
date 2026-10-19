@@ -106,6 +106,16 @@ body {
 }
 .rm-btn:hover { background: #2d1522; color: var(--red); border-color: #5a2030; }
 
+.mode-btn {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.12s;
+}
+.mode-btn:hover { color: var(--text); border-color: var(--accent); }
+.mode-btn.active { color: var(--accent); border-color: var(--accent); }
+
 /* ── Buttons ────────────────────────────────────── */
 .add-btn {
   width: 100%; padding: 9px; border-radius: 10px;
@@ -507,6 +517,69 @@ body {
   </div>
 </div>
 
+<!-- Lista de ciudades para seleccionar -->
+<datalist id="listaCiudades">
+  <option value="ABREGO">
+  <option value="AGUACHICA">
+  <option value="AGUACHICA FRESCALECHE FACTORES Y MERCADEO">
+  <option value="BARBOSA">
+  <option value="BARICHARA">
+  <option value="BARRANCABERMEJA">
+  <option value="BUCARAMANGA">
+  <option value="CAPITANEJO">
+  <option value="CARCASI">
+  <option value="CATAGALLO">
+  <option value="CHARALA">
+  <option value="CIMITARRA">
+  <option value="CUCUTA">
+  <option value="CURUMANI">
+  <option value="EL CARMEN CHUCURI">
+  <option value="EL PLAYON">
+  <option value="EL ZULIA">
+  <option value="FLORIDABLANCA">
+  <option value="GAMARRA">
+  <option value="GIRON">
+  <option value="GUACA">
+  <option value="LA ESPERANZA NRTE SANTANDER">
+  <option value="LANDAZURI">
+  <option value="LEBRIJA">
+  <option value="LOS PATIOS">
+  <option value="MALAGA">
+  <option value="MOGOTES">
+  <option value="MONIQUIRA">
+  <option value="OCAÑA">
+  <option value="OIBA">
+  <option value="PAILITAS">
+  <option value="PAMPLONA">
+  <option value="PELAYA">
+  <option value="PIEDECUESTA">
+  <option value="PUENTE NACIONAL">
+  <option value="PUERTO ARAUJO">
+  <option value="PUERTO PARRA">
+  <option value="PUERTO SANTANDER">
+  <option value="PUERTO WILCHES">
+  <option value="RIO DE ORO">
+  <option value="RIONEGRO">
+  <option value="SABANA DE TORRES">
+  <option value="SAN ALBERTO">
+  <option value="SAN GIL">
+  <option value="SAN MARTIN">
+  <option value="SAN PABLO SUR DE BOLIVAR">
+  <option value="SAN VICENTE CHUCURI">
+  <option value="SANTA ROSA SUR BOLIVAR">
+  <option value="SIMACOTA">
+  <option value="SIMITI">
+  <option value="SOCORRO">
+  <option value="SUAITA">
+  <option value="TIBU">
+  <option value="VALLE DE SAN JOSE">
+  <option value="VELEZ">
+  <option value="VILLA DEL ROSARIO">
+  <option value="VILLANUEVA">
+  <option value="YONDO">
+  <option value="ZAPATOCA">
+</datalist>
+
 <script>
 // ── Constantes ───────────────────────────────────
 // PASO 1: total × 1.4% → redondear al próximo múltiplo de 1.000 = Valor Cancelar objetivo
@@ -554,6 +627,24 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener('scroll', actualizarBtn);
 }
 
+// ── Filtro de ciudades: solo las que EMPIEZAN por lo escrito ──
+const dlCiudades    = document.getElementById('listaCiudades');
+const todasCiudades = Array.from(dlCiudades.options).map(o => o.value);
+const normCiudad    = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+
+function filtrarCiudades(e) {
+  if (!e.target.classList || !e.target.classList.contains('city-inp')) return;
+  const q = normCiudad(e.target.value);
+  const lista = q ? todasCiudades.filter(c => normCiudad(c).startsWith(q)) : todasCiudades;
+  dlCiudades.replaceChildren(...lista.map(c => {
+    const o = document.createElement('option');
+    o.value = c;
+    return o;
+  }));
+}
+document.addEventListener('input', filtrarCiudades);
+document.addEventListener('focusin', filtrarCiudades);
+
 // ── City rows ────────────────────────────────────
 function addRow() {
   rowCount++;
@@ -561,7 +652,12 @@ function addRow() {
   const div = document.createElement('div');
   div.className = 'city-row'; div.id = 'row-' + id;
   div.innerHTML = `
-    <input type="text" class="city-inp" placeholder="Ciudad" id="city-${id}" autocomplete="off" />
+    <input type="text" class="city-inp" placeholder="Ciudad" id="city-${id}" list="listaCiudades" autocomplete="off" />
+    <button class="mode-btn" id="mode-${id}" onclick="toggleModo(${id})" title="Escribir ciudad manualmente">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 2.5l2.5 2.5L5.5 13H3v-2.5L11 2.5z"/>
+      </svg>
+    </button>
     <div class="val-wrap">
       <span class="val-prefix">$</span>
       <input type="text" class="val-inp" placeholder="0" id="val-${id}" oninput="onValInput(this)" autocomplete="off" />
@@ -570,6 +666,25 @@ function addRow() {
     <button class="rm-btn" onclick="removeRow(${id})" title="Eliminar">×</button>
   `;
   document.getElementById('cityRows').appendChild(div);
+}
+
+// Alterna entre elegir de la lista y escribir una ciudad libre
+function toggleModo(id) {
+  const inp = document.getElementById('city-' + id);
+  const btn = document.getElementById('mode-' + id);
+  const manual = !inp.hasAttribute('list');
+  if (manual) {
+    inp.setAttribute('list', 'listaCiudades');
+    inp.placeholder = 'Ciudad';
+    btn.classList.remove('active');
+    btn.title = 'Escribir ciudad manualmente';
+  } else {
+    inp.removeAttribute('list');
+    inp.placeholder = 'Escribir ciudad';
+    btn.classList.add('active');
+    btn.title = 'Volver a la lista de ciudades';
+  }
+  inp.focus();
 }
 
 function removeRow(id) {
@@ -627,15 +742,19 @@ function calcular(total) {
   const flete   = objetivo + mas1434;
   rawFlete = flete;
 
+  // Valores enteros (pesos): las líneas mostradas siempre suman exacto
+  const objetivoR = Math.round(objetivo);
+  const fleteR    = Math.round(flete);
+
   // UI paso 1
   document.getElementById('rTotal').textContent    = '$ ' + fmtInt(total);
-  document.getElementById('rMas14').textContent    = '+ $ ' + fmtInt(mas14);
+  document.getElementById('rMas14').textContent    = '+ $ ' + fmtInt(objetivoR - total);
   document.getElementById('rAntes').textContent    = '$ ' + fmtInt(objetivo);
   document.getElementById('rObjetivo').textContent = '$ ' + fmtInt(objetivo);
 
   // UI paso 2
   document.getElementById('rObjetivo2').textContent = '$ ' + fmtInt(objetivo);
-  document.getElementById('rMas1434').textContent   = '+ $ ' + fmtInt(mas1434);
+  document.getElementById('rMas1434').textContent   = '+ $ ' + fmtInt(fleteR - objetivoR);
   document.getElementById('rFleteRaw').textContent  = '$ ' + fmtInt(flete);
   document.getElementById('rFlete').textContent     = '$ ' + fmtInt(flete);
 
@@ -668,7 +787,7 @@ function onProbInput() {
   }
 
   const vc   = flete - imp;
-  const diff = rawObjetivo > 0 ? vc - rawObjetivo : null;
+  const diff = rawObjetivo > 0 ? vc - Math.round(rawObjetivo) : null;
   const exacto  = diff === 0;
   const cercano = diff !== null && Math.abs(diff) <= 1000;
 
@@ -718,7 +837,7 @@ function actualizarSugerido(imp) {
     rawSugerido = 0;
     return;
   }
-  rawSugerido = rawObjetivo + imp;
+  rawSugerido = Math.round(rawObjetivo) + imp;
   document.getElementById('pSugerido').textContent = '$ ' + fmtInt(rawSugerido);
   sugerido.style.display = 'flex';
 }
